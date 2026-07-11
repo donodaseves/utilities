@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>utils/ — a directory of small useful things</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1117;
+    --bg-2:#0b0d12;
+    --panel:#171a24;
+    --panel-2:#1d2130;
+    --border:#2a2f40;
+    --border-soft:#20242f;
+    --text:#e7e9f0;
+    --text-dim:#8890a4;
+    --text-faint:#5b6272;
+    --accent:#5eead4;
+    --accent-dim:#2f7a6f;
+    --accent-2:#f5a623;
+    --danger:#ef6a6a;
+    --ok:#7ee787;
+    --mono:'JetBrains Mono', 'Fira Code', monospace;
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    min-height:100vh;
+    line-height:1.5;
+  }
+  ::selection{background:var(--accent);color:#0b0d12;}
+
+  a{color:var(--accent);}
+
+  /* ---------- layout ---------- */
+  .app{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    min-height:100vh;
+  }
+  @media (max-width: 880px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{
+      position:sticky; top:0; z-index:20;
+      max-height:none;
+      border-right:none;
+      border-bottom:1px solid var(--border);
+    }
+  }
+
+  /* ---------- sidebar ---------- */
+  .sidebar{
+    background:var(--bg-2);
+    border-right:1px solid var(--border);
+    padding:20px 0 40px;
+    position:sticky;
+    top:0;
+    align-self:start;
+    height:100vh;
+    overflow-y:auto;
+  }
+  .brand{
+    padding:0 20px 18px;
+    border-bottom:1px solid var(--border-soft);
+    margin-bottom:10px;
+  }
+  .brand .prompt{
+    font-family:var(--mono);
+    color:var(--accent);
+    font-size:13px;
+    letter-spacing:.02em;
+  }
+  .brand h1{
+    font-family:var(--mono);
+    font-size:20px;
+    margin:6px 0 4px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+  .brand p{
+    color:var(--text-dim);
+    font-size:12.5px;
+    margin:0;
+  }
+
+  .nav-toggle{
+    display:none;
+  }
+  @media (max-width: 880px){
+    .nav-toggle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      width:100%;
+      background:none;
+      border:none;
+      color:var(--text);
+      padding:14px 20px;
+      font-family:var(--mono);
+      font-size:13px;
+      cursor:pointer;
+    }
+    .nav-body{display:none;}
+    .nav-body.open{display:block;}
+    .sidebar{height:auto;max-height:100vh;overflow-y:auto;}
+  }
+
+  .category{
+    margin:14px 0;
+  }
+  .category-label{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-faint);
+    padding:6px 20px;
+    text-transform:lowercase;
+    letter-spacing:.03em;
+  }
+  .tool-link{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:var(--text-dim);
+    font-family:var(--mono);
+    font-size:13px;
+    padding:7px 20px 7px 30px;
+    cursor:pointer;
+    border-left:2px solid transparent;
+  }
+  .tool-link:hover{
+    color:var(--text);
+    background:var(--panel);
+  }
+  .tool-link.active{
+    color:var(--accent);
+    border-left-color:var(--accent);
+    background:var(--panel);
+  }
+  .tool-link .ext{color:var(--text-faint);}
+  .tool-link.active .ext{color:var(--accent-dim);}
+  .tool-link .arrow{margin-left:auto;font-size:11px;color:var(--text-faint);}
+
+  /* ---------- main ---------- */
+  main{
+    padding:36px 42px 80px;
+    max-width:920px;
+  }
+  @media (max-width:600px){
+    main{padding:24px 18px 60px;}
+  }
+  .panel{display:none;animation:fade .25s ease;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .panel-head{
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .panel-eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--accent);
+    margin:0 0 6px;
+  }
+  .panel-head h2{
+    margin:0 0 6px;
+    font-size:26px;
+    letter-spacing:-0.01em;
+  }
+  .panel-head p{
+    margin:0;
+    color:var(--text-dim);
+    font-size:14.5px;
+    max-width:60ch;
+  }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px;
+    margin-bottom:16px;
+  }
+  .card h3{
+    margin:0 0 14px;
+    font-size:14px;
+    font-family:var(--mono);
+    color:var(--text-dim);
+    font-weight:600;
+    text-transform:lowercase;
+  }
+
+  label{
+    display:block;
+    font-size:12.5px;
+    color:var(--text-dim);
+    margin-bottom:5px;
+    font-family:var(--mono);
+  }
+  input[type=text], input[type=number], input[type=datetime-local], select, textarea{
+    width:100%;
+    background:var(--bg-2);
+    border:1px solid var(--border);
+    color:var(--text);
+    border-radius:7px;
+    padding:9px 11px;
+    font-size:14px;
+    font-family:var(--sans);
+    outline:none;
+  }
+  input[type=color]{
+    width:52px;
+    height:38px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    background:var(--bg-2);
+    padding:2px;
+    cursor:pointer;
+  }
+  input:focus, select:focus, textarea:focus, button:focus-visible{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(94,234,212,.15);
+  }
+  textarea{resize:vertical;min-height:100px;font-family:var(--mono);font-size:13px;}
+
+  .row{display:flex;gap:12px;flex-wrap:wrap;}
+  .row > div{flex:1;min-width:120px;}
+  .field{margin-bottom:12px;}
+
+  button, .btn{
+    background:var(--accent);
+    color:#0b0d12;
+    border:none;
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:13px;
+    padding:9px 16px;
+    border-radius:7px;
+    cursor:pointer;
+    transition:transform .08s ease, opacity .15s ease;
+  }
+  button:hover{opacity:.88;}
+  button:active{transform:scale(.97);}
+  button.secondary{
+    background:transparent;
+    color:var(--text);
+    border:1px solid var(--border);
+  }
+  button.secondary:hover{border-color:var(--text-dim);opacity:1;}
+  button.danger{background:var(--danger);color:#1a0a0a;}
+  button.small{padding:6px 10px;font-size:12px;}
+
+  .result{
+    font-family:var(--mono);
+    font-size:15px;
+    background:var(--bg-2);
+    border:1px dashed var(--border);
+    border-radius:7px;
+    padding:12px 14px;
+    color:var(--accent);
+    margin-top:10px;
+    word-break:break-word;
+  }
+  .result .dim{color:var(--text-dim);font-size:12.5px;}
+  .muted{color:var(--text-dim);font-size:12.5px;}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-soft);}
+  th{font-family:var(--mono);color:var(--text-dim);font-weight:600;font-size:12px;}
+  tr.best td{color:var(--accent);}
+
+  /* external links grid */
+  .link-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+    gap:14px;
+  }
+  .link-card{
+    display:block;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px;
+    text-decoration:none;
+    transition:border-color .15s ease, transform .1s ease;
+  }
+  .link-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .link-card .name{
+    font-family:var(--mono);
+    color:var(--text);
+    font-size:15px;
+    font-weight:600;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .link-card .name .go{color:var(--accent);font-size:13px;}
+  .link-card .desc{color:var(--text-dim);font-size:12.5px;margin-top:6px;}
+  .link-card .url{color:var(--text-faint);font-size:11.5px;margin-top:8px;font-family:var(--mono);}
+
+  footer.foot{
+    margin-top:40px;
+    padding-top:16px;
+    border-top:1px solid var(--border-soft);
+    color:var(--text-faint);
+    font-family:var(--mono);
+    font-size:12px;
+  }
+
+  /* dice */
+  .dice-tray{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+  .die{
+    width:56px;height:56px;
+    border-radius:10px;
+    background:var(--bg-2);
+    border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);
+    font-size:20px;
+    color:var(--accent);
+  }
+  .die.rolling{animation:roll .35s ease;}
+  @keyframes roll{
+    0%{transform:rotate(0deg) scale(1);}
+    50%{transform:rotate(180deg) scale(1.08);}
+    100%{transform:rotate(360deg) scale(1);}
+  }
+
+  /* contrast checker */
+  .contrast-preview{
+    border-radius:8px;
+    padding:26px 20px;
+    text-align:center;
+    margin-top:14px;
+    border:1px solid var(--border);
+  }
+  .contrast-preview .big{font-size:22px;font-weight:700;margin-bottom:4px;}
+  .contrast-preview .small{font-size:14px;}
+  .badge{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:11px;
+    padding:3px 8px;
+    border-radius:5px;
+    margin:2px 6px 2px 0;
+  }
+  .badge.pass{background:rgba(126,231,135,.15);color:var(--ok);}
+  .badge.fail{background:rgba(239,106,106,.15);color:var(--danger);}
+
+  /* paint */
+  #paintCanvas{
+    background:#ffffff;
+    border-radius:8px;
+    border:1px solid var(--border);
+    touch-action:none;
+    display:block;
+    max-width:100%;
+    cursor:crosshair;
+  }
+  .paint-toolbar{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+  }
+  .paint-toolbar .field{margin-bottom:0;min-width:auto;}
+  .swatches{display:flex;gap:6px;}
+  .swatch{
+    width:22px;height:22px;border-radius:50%;
+    border:2px solid var(--border);
+    cursor:pointer;
+  }
+  .swatch.active{border-color:var(--text);}
+
+  /* decision tree */
+  .tree-node{
+    border-left:2px solid var(--border);
+    padding-left:16px;
+    margin:10px 0 10px 4px;
+  }
+  .node-box{
+    background:var(--bg-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px;
+  }
+  .node-box.outcome{border-color:var(--accent-dim);}
+  .node-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+  .branch-label{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--text-faint);
+    margin:8px 0 4px;
+  }
+
+  code.inline{
+    background:var(--bg-2);
+    border:1px solid var(--border);
+    padding:1px 6px;
+    border-radius:5px;
+    font-family:var(--mono);
+    font-size:12.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <button class="nav-toggle" id="navToggle">
+      <span>utils/ — menu</span>
+      <span>☰</span>
+    </button>
+    <div class="nav-body" id="navBody">
+      <div class="brand">
+        <div class="prompt">$ ls utils/</div>
+        <h1>utils/</h1>
+        <p>a directory of small useful things. no accounts, no tracking, nothing saved.</p>
+      </div>
+
+      <nav id="navList">
+        <div class="category">
+          <div class="category-label">/calculators</div>
+          <button class="tool-link" data-tool="percent">percentage<span class="ext">.calc</span></button>
+          <button class="tool-link" data-tool="datediff">datetime-diff<span class="ext">.calc</span></button>
+          <button class="tool-link" data-tool="ppu">price-per-unit<span class="ext">.calc</span></button>
+        </div>
+        <div class="category">
+          <div class="category-label">/converters</div>
+          <button class="tool-link" data-tool="ampm">ampm-24h<span class="ext">.conv</span></button>
+        </div>
+        <div class="category">
+          <div class="category-label">/generators</div>
+          <button class="tool-link" data-tool="picker">random-picker<span class="ext">.gen</span></button>
+          <button class="tool-link" data-tool="decisiontree">decision-tree<span class="ext">.gen</span></button>
+          <button class="tool-link" data-tool="lorem">lorem-ipsum<span class="ext">.gen</span></button>
+        </div>
+        <div class="category">
+          <div class="category-label">/design</div>
+          <button class="tool-link" data-tool="contrast">contrast-checker<span class="ext">.tool</span></button>
+          <button class="tool-link" data-tool="paint">paint<span class="ext">.tool</span></button>
+        </div>
+        <div class="category">
+          <div class="category-label">/fun</div>
+          <button class="tool-link" data-tool="dice">dado-virtual<span class="ext">.tool</span></button>
+        </div>
+        <div class="category">
+          <div class="category-label">/external</div>
+          <button class="tool-link" data-tool="links">redirects<span class="arrow">↗</span></button>
+        </div>
+      </nav>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- PERCENTAGE CALCULATOR -->
+    <section class="panel" id="panel-percent">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/calculators/percentage.calc</p>
+        <h2>% Math Calculator</h2>
+        <p>Three common percentage problems, solved live as you type.</p>
+      </div>
+
+      <div class="card">
+        <h3>what is X% of Y</h3>
+        <div class="row">
+          <div class="field"><label>X (%)</label><input type="number" id="p1x" placeholder="e.g. 15"></div>
+          <div class="field"><label>Y</label><input type="number" id="p1y" placeholder="e.g. 200"></div>
+        </div>
+        <div class="result" id="p1r">—</div>
+      </div>
+
+      <div class="card">
+        <h3>X is what % of Y</h3>
+        <div class="row">
+          <div class="field"><label>X</label><input type="number" id="p2x" placeholder="e.g. 30"></div>
+          <div class="field"><label>Y</label><input type="number" id="p2y" placeholder="e.g. 200"></div>
+        </div>
+        <div class="result" id="p2r">—</div>
+      </div>
+
+      <div class="card">
+        <h3>% change from X to Y</h3>
+        <div class="row">
+          <div class="field"><label>X (start)</label><input type="number" id="p3x" placeholder="e.g. 80"></div>
+          <div class="field"><label>Y (end)</label><input type="number" id="p3y" placeholder="e.g. 100"></div>
+        </div>
+        <div class="result" id="p3r">—</div>
+      </div>
+    </section>
+
+    <!-- DATE/TIME DIFFERENCE -->
+    <section class="panel" id="panel-datediff">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/calculators/datetime-diff.calc</p>
+        <h2>Date / Time Difference</h2>
+        <p>Pick two moments in time, get the gap between them broken down.</p>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="field"><label>from</label><input type="datetime-local" id="ddFrom"></div>
+          <div class="field"><label>to</label><input type="datetime-local" id="ddTo"></div>
+        </div>
+        <div class="result" id="ddResult">pick two dates above</div>
+      </div>
+    </section>
+
+    <!-- PRICE PER UNIT -->
+    <section class="panel" id="panel-ppu">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/calculators/price-per-unit.calc</p>
+        <h2>Price-per-Unit Comparison</h2>
+        <p>Compare products with different sizes to see which is actually cheaper.</p>
+      </div>
+      <div class="card">
+        <table id="ppuTable">
+          <thead><tr><th>item</th><th>price</th><th>qty</th><th>unit</th><th>per unit</th><th></th></tr></thead>
+          <tbody id="ppuBody"></tbody>
+        </table>
+        <button class="secondary small" id="ppuAdd" style="margin-top:12px;">+ add item</button>
+      </div>
+    </section>
+
+    <!-- AM/PM to 24h -->
+    <section class="panel" id="panel-ampm">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/converters/ampm-24h.conv</p>
+        <h2>AM/PM ⇄ 24-Hour</h2>
+        <p>Convert clock times both directions.</p>
+      </div>
+      <div class="card">
+        <h3>12-hour → 24-hour</h3>
+        <div class="row">
+          <div class="field"><label>hour (1–12)</label><input type="number" id="h12" min="1" max="12" placeholder="7"></div>
+          <div class="field"><label>minute</label><input type="number" id="m12" min="0" max="59" placeholder="30"></div>
+          <div class="field">
+            <label>period</label>
+            <select id="ampmSel"><option value="AM">AM</option><option value="PM">PM</option></select>
+          </div>
+        </div>
+        <div class="result" id="to24r">—</div>
+      </div>
+      <div class="card">
+        <h3>24-hour → 12-hour</h3>
+        <div class="row">
+          <div class="field"><label>hour (0–23)</label><input type="number" id="h24" min="0" max="23" placeholder="19"></div>
+          <div class="field"><label>minute</label><input type="number" id="m24" min="0" max="59" placeholder="30"></div>
+        </div>
+        <div class="result" id="to12r">—</div>
+      </div>
+    </section>
+
+    <!-- RANDOM PICKER -->
+    <section class="panel" id="panel-picker">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/generators/random-picker.gen</p>
+        <h2>Random Picker</h2>
+        <p>One item per line. Pick one at random.</p>
+      </div>
+      <div class="card">
+        <label>options</label>
+        <textarea id="pickerList" placeholder="pizza&#10;sushi&#10;tacos&#10;burgers"></textarea>
+        <div class="row" style="margin-top:12px;align-items:center;">
+          <div class="field" style="flex:none;">
+            <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;">
+              <input type="checkbox" id="pickerRemove" style="width:auto;"> remove after pick
+            </label>
+          </div>
+          <div style="flex:none;"><button id="pickerBtn">pick one</button></div>
+        </div>
+        <div class="result" id="pickerResult">—</div>
+      </div>
+    </section>
+
+    <!-- DECISION TREE -->
+    <section class="panel" id="panel-decisiontree">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/generators/decision-tree.gen</p>
+        <h2>Decision Tree Generator</h2>
+        <p>Build a yes/no decision tree. Turn any question into branching outcomes.</p>
+      </div>
+      <div class="card">
+        <div id="treeRoot"></div>
+        <div class="node-actions" style="margin-top:14px;">
+          <button class="secondary small" id="treeReset">reset tree</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOREM IPSUM / PLACEHOLDER DATA -->
+    <section class="panel" id="panel-lorem">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/generators/lorem-ipsum.gen</p>
+        <h2>Lorem Ipsum & Placeholder Data</h2>
+        <p>Filler text for layouts, and fake rows of data for testing tables and forms.</p>
+      </div>
+
+      <div class="card">
+        <h3>lorem ipsum</h3>
+        <div class="row">
+          <div class="field"><label>paragraphs</label><input type="number" id="loremCount" min="1" max="20" value="3"></div>
+          <div style="flex:none;align-self:flex-end;"><button id="loremBtn">generate</button></div>
+        </div>
+        <textarea id="loremOut" style="min-height:160px;margin-top:10px;" readonly></textarea>
+        <button class="secondary small" id="loremCopy" style="margin-top:8px;">copy</button>
+      </div>
+
+      <div class="card">
+        <h3>placeholder data</h3>
+        <div class="row">
+          <div class="field"><label>rows</label><input type="number" id="fakeCount" min="1" max="50" value="8"></div>
+          <div style="flex:none;align-self:flex-end;"><button id="fakeBtn">generate</button></div>
+        </div>
+        <div style="overflow-x:auto;margin-top:10px;">
+          <table id="fakeTable"><thead><tr><th>name</th><th>email</th><th>phone</th><th>city</th></tr></thead><tbody id="fakeBody"></tbody></table>
+        </div>
+        <button class="secondary small" id="fakeCopy" style="margin-top:8px;">copy as JSON</button>
+      </div>
+    </section>
+
+    <!-- CONTRAST CHECKER -->
+    <section class="panel" id="panel-contrast">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/design/contrast-checker.tool</p>
+        <h2>Contrast Checker</h2>
+        <p>WCAG contrast ratio between a foreground and background color.</p>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="field"><label>text color</label><input type="color" id="fgColor" value="#e7e9f0"></div>
+          <div class="field"><label>background color</label><input type="color" id="bgColor" value="#0f1117"></div>
+        </div>
+        <div class="result" id="contrastRatio">—</div>
+        <div id="contrastBadges" style="margin-top:8px;"></div>
+        <div class="contrast-preview" id="contrastPreview">
+          <div class="big">The quick brown fox</div>
+          <div class="small">jumps over the lazy dog — sample body text at this size</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIMPLE PAINT -->
+    <section class="panel" id="panel-paint">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/design/paint.tool</p>
+        <h2>Simple Paint</h2>
+        <p>Draw something. Nothing is saved unless you download it.</p>
+      </div>
+      <div class="card">
+        <div class="paint-toolbar">
+          <div class="field"><label>color</label><input type="color" id="paintColor" value="#111111"></div>
+          <div class="swatches" id="swatches"></div>
+          <div class="field"><label>brush size</label><input type="number" id="brushSize" min="1" max="40" value="4" style="width:70px;"></div>
+          <button class="secondary small" id="paintClear">clear</button>
+          <button class="small" id="paintSave">download PNG</button>
+        </div>
+        <canvas id="paintCanvas" width="800" height="480"></canvas>
+      </div>
+    </section>
+
+    <!-- DADO VIRTUAL -->
+    <section class="panel" id="panel-dice">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/fun/dado-virtual.tool</p>
+        <h2>Dado Virtual</h2>
+        <p>Roll any number of dice, in any size.</p>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="field"><label>number of dice</label><input type="number" id="diceCount" min="1" max="12" value="2"></div>
+          <div class="field">
+            <label>sides</label>
+            <select id="diceSides">
+              <option value="4">d4</option>
+              <option value="6" selected>d6</option>
+              <option value="8">d8</option>
+              <option value="10">d10</option>
+              <option value="12">d12</option>
+              <option value="20">d20</option>
+              <option value="100">d100</option>
+            </select>
+          </div>
+          <div style="flex:none;align-self:flex-end;"><button id="rollBtn">roll</button></div>
+        </div>
+        <div class="dice-tray" id="diceTray"></div>
+        <div class="result" id="diceSum">—</div>
+      </div>
+    </section>
+
+    <!-- EXTERNAL LINKS -->
+    <section class="panel" id="panel-links">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/external/redirects</p>
+        <h2>Quick Redirects</h2>
+        <p>Shortcuts to external tools used often enough to be worth a bookmark.</p>
+      </div>
+      <div class="link-grid">
+        <a class="link-card" href="https://www.diffchecker.com/" target="_blank" rel="noopener noreferrer">
+          <div class="name">Diffchecker <span class="go">↗</span></div>
+          <div class="desc">Compare text, files, images, folders.</div>
+          <div class="url">diffchecker.com</div>
+        </a>
+        <a class="link-card" href="https://who.is/" target="_blank" rel="noopener noreferrer">
+          <div class="name">Who.is <span class="go">↗</span></div>
+          <div class="desc">WHOIS domain and DNS lookups.</div>
+          <div class="url">who.is</div>
+        </a>
+        <a class="link-card" href="https://temp-mail.org/" target="_blank" rel="noopener noreferrer">
+          <div class="name">Temp Mail <span class="go">↗</span></div>
+          <div class="desc">Disposable inbox for throwaway signups.</div>
+          <div class="url">temp-mail.org</div>
+        </a>
+        <a class="link-card" href="https://www.remove.bg/" target="_blank" rel="noopener noreferrer">
+          <div class="name">remove.bg <span class="go">↗</span></div>
+          <div class="desc">Automatic background removal for images.</div>
+          <div class="url">remove.bg</div>
+        </a>
+      </div>
+    </section>
+
+    <footer class="foot">utils/ — static, client-side only. nothing you type here is stored, sent, or saved.</footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- navigation ---------------- */
+  var links = document.querySelectorAll('.tool-link');
+  var panels = document.querySelectorAll('.panel');
+
+  function showTool(name){
+    links.forEach(function(l){ l.classList.toggle('active', l.dataset.tool === name); });
+    panels.forEach(function(p){ p.classList.toggle('active', p.id === 'panel-' + name); });
+    var navBody = document.getElementById('navBody');
+    if(window.innerWidth <= 880){ navBody.classList.remove('open'); }
+    window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  }
+  links.forEach(function(l){
+    l.addEventListener('click', function(){ showTool(l.dataset.tool); });
+  });
+  document.getElementById('navToggle').addEventListener('click', function(){
+    document.getElementById('navBody').classList.toggle('open');
+  });
+  showTool('percent');
+
+  /* ---------------- percentage calculator ---------------- */
+  function fmt(n){
+    if(!isFinite(n)) return '—';
+    return (Math.round(n * 10000) / 10000).toString();
+  }
+  function bindPercent(xid, yid, rid, fn){
+    var x = document.getElementById(xid), y = document.getElementById(yid), r = document.getElementById(rid);
+    function calc(){
+      var xv = parseFloat(x.value), yv = parseFloat(y.value);
+      if(isNaN(xv) || isNaN(yv)){ r.textContent = '—'; return; }
+      r.textContent = fn(xv, yv);
+    }
+    x.addEventListener('input', calc);
+    y.addEventListener('input', calc);
+  }
+  bindPercent('p1x','p1y','p1r', function(x,y){ return x + '% of ' + y + ' = ' + fmt(x/100*y); });
+  bindPercent('p2x','p2y','p2r', function(x,y){ if(y===0) return 'y cannot be 0'; return x + ' is ' + fmt(x/y*100) + '% of ' + y; });
+  bindPercent('p3x','p3y','p3r', function(x,y){
+    if(x===0) return 'x cannot be 0';
+    var change = (y-x)/x*100;
+    var sign = change >= 0 ? '+' : '';
+    return sign + fmt(change) + '%  (' + (change>=0?'increase':'decrease') + ')';
+  });
+
+  /* ---------------- date/time diff ---------------- */
+  var ddFrom = document.getElementById('ddFrom'), ddTo = document.getElementById('ddTo'), ddResult = document.getElementById('ddResult');
+  function calcDiff(){
+    if(!ddFrom.value || !ddTo.value){ ddResult.textContent = 'pick two dates above'; return; }
+    var a = new Date(ddFrom.value), b = new Date(ddTo.value);
+    var ms = Math.abs(b - a);
+    var totalSec = Math.floor(ms/1000);
+    var days = Math.floor(totalSec / 86400);
+    var hours = Math.floor((totalSec % 86400) / 3600);
+    var mins = Math.floor((totalSec % 3600) / 60);
+    var secs = totalSec % 60;
+    ddResult.innerHTML = days + 'd ' + hours + 'h ' + mins + 'm ' + secs + 's' +
+      '<div class="dim" style="margin-top:6px;">= ' + fmt(totalSec/3600) + ' total hours · ' + fmt(totalSec/86400) + ' total days</div>';
+  }
+  ddFrom.addEventListener('input', calcDiff);
+  ddTo.addEventListener('input', calcDiff);
+
+  /* ---------------- price per unit ---------------- */
+  var ppuBody = document.getElementById('ppuBody');
+  var ppuRows = [];
+  var ppuId = 0;
+  function ppuAddRow(name, price, qty, unit){
+    var id = ppuId++;
+    ppuRows.push({id:id});
+    var tr = document.createElement('tr');
+    tr.dataset.id = id;
+    tr.innerHTML =
+      '<td><input type="text" class="ppuName" value="'+(name||'')+'" placeholder="item" style="min-width:90px;"></td>' +
+      '<td><input type="number" class="ppuPrice" value="'+(price!==undefined?price:'')+'" placeholder="0.00" style="width:80px;"></td>' +
+      '<td><input type="number" class="ppuQty" value="'+(qty!==undefined?qty:'')+'" placeholder="0" style="width:70px;"></td>' +
+      '<td><input type="text" class="ppuUnit" value="'+(unit||'')+'" placeholder="g/ml/pcs" style="width:70px;"></td>' +
+      '<td class="ppuPer">—</td>' +
+      '<td><button class="secondary small ppuDel">×</button></td>';
+    ppuBody.appendChild(tr);
+    tr.querySelectorAll('input').forEach(function(inp){ inp.addEventListener('input', ppuRecalc); });
+    tr.querySelector('.ppuDel').addEventListener('click', function(){ tr.remove(); ppuRecalc(); });
+    ppuRecalc();
+  }
+  function ppuRecalc(){
+    var rows = Array.from(ppuBody.querySelectorAll('tr'));
+    var best = null, bestVal = Infinity;
+    rows.forEach(function(tr){
+      var price = parseFloat(tr.querySelector('.ppuPrice').value);
+      var qty = parseFloat(tr.querySelector('.ppuQty').value);
+      var per = tr.querySelector('.ppuPer');
+      tr.classList.remove('best');
+      if(isNaN(price) || isNaN(qty) || qty <= 0){ per.textContent = '—'; return; }
+      var val = price / qty;
+      per.textContent = fmt(val) + ' / ' + (tr.querySelector('.ppuUnit').value || 'unit');
+      if(val < bestVal){ bestVal = val; best = tr; }
+    });
+    if(best) best.classList.add('best');
+  }
+  document.getElementById('ppuAdd').addEventListener('click', function(){ ppuAddRow(); });
+  ppuAddRow('brand A', 3.49, 500, 'g');
+  ppuAddRow('brand B', 5.99, 1000, 'g');
+
+  /* ---------------- am/pm <-> 24h ---------------- */
+  function pad2(n){ return n.toString().padStart(2,'0'); }
+  var h12 = document.getElementById('h12'), m12 = document.getElementById('m12'), ampmSel = document.getElementById('ampmSel'), to24r = document.getElementById('to24r');
+  function calcTo24(){
+    var h = parseInt(h12.value, 10), m = parseInt(m12.value, 10);
+    if(isNaN(h) || h < 1 || h > 12 || isNaN(m) || m < 0 || m > 59){ to24r.textContent = '—'; return; }
+    var period = ampmSel.value;
+    var hh = h % 12;
+    if(period === 'PM') hh += 12;
+    to24r.textContent = pad2(hh) + ':' + pad2(m);
+  }
+  [h12,m12,ampmSel].forEach(function(el){ el.addEventListener('input', calcTo24); el.addEventListener('change', calcTo24); });
+
+  var h24 = document.getElementById('h24'), m24 = document.getElementById('m24'), to12r = document.getElementById('to12r');
+  function calcTo12(){
+    var h = parseInt(h24.value, 10), m = parseInt(m24.value, 10);
+    if(isNaN(h) || h < 0 || h > 23 || isNaN(m) || m < 0 || m > 59){ to12r.textContent = '—'; return; }
+    var period = h < 12 ? 'AM' : 'PM';
+    var hh = h % 12; if(hh === 0) hh = 12;
+    to12r.textContent = hh + ':' + pad2(m) + ' ' + period;
+  }
+  [h24,m24].forEach(function(el){ el.addEventListener('input', calcTo12); });
+
+  /* ---------------- random picker ---------------- */
+  var pickerList = document.getElementById('pickerList'), pickerBtn = document.getElementById('pickerBtn'),
+      pickerResult = document.getElementById('pickerResult'), pickerRemove = document.getElementById('pickerRemove');
+  pickerBtn.addEventListener('click', function(){
+    var items = pickerList.value.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    if(items.length === 0){ pickerResult.textContent = 'add at least one option'; return; }
+    var idx = Math.floor(Math.random() * items.length);
+    pickerResult.textContent = '→ ' + items[idx];
+    if(pickerRemove.checked){
+      items.splice(idx, 1);
+      pickerList.value = items.join('\n');
+    }
+  });
+
+  /* ---------------- decision tree ---------------- */
+  var tree = { type:'question', text:'', yes:null, no:null };
+  var treeRoot = document.getElementById('treeRoot');
+
+  function newNode(type){ return type === 'outcome' ? {type:'outcome', text:''} : {type:'question', text:'', yes:null, no:null}; }
+
+  function renderNode(node, container, branchLabel){
+    var wrap = document.createElement('div');
+    wrap.className = 'tree-node';
+    if(branchLabel){
+      var bl = document.createElement('div');
+      bl.className = 'branch-label';
+      bl.textContent = branchLabel;
+      wrap.appendChild(bl);
+    }
+    var box = document.createElement('div');
+    box.className = 'node-box' + (node.type === 'outcome' ? ' outcome' : '');
+
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = node.type === 'outcome' ? 'outcome / result…' : 'question…';
+    input.value = node.text;
+    input.addEventListener('input', function(){ node.text = input.value; });
+    box.appendChild(input);
+
+    var actions = document.createElement('div');
+    actions.className = 'node-actions';
+
+    if(node.type === 'question'){
+      if(!node.yes){
+        var addYes = document.createElement('button');
+        addYes.className = 'secondary small';
+        addYes.textContent = '+ if yes';
+        addYes.addEventListener('click', function(){ node.yes = newNode('question'); render(); });
+        actions.appendChild(addYes);
+      }
+      if(!node.no){
+        var addNo = document.createElement('button');
+        addNo.className = 'secondary small';
+        addNo.textContent = '+ if no';
+        addNo.addEventListener('click', function(){ node.no = newNode('question'); render(); });
+        actions.appendChild(addNo);
+      }
+      var toOutcome = document.createElement('button');
+      toOutcome.className = 'secondary small';
+      toOutcome.textContent = 'make this an outcome';
+      toOutcome.addEventListener('click', function(){ node.type = 'outcome'; node.text = node.text; delete node.yes; delete node.no; render(); });
+      actions.appendChild(toOutcome);
+    }
+    box.appendChild(actions);
+    wrap.appendChild(box);
+
+    if(node.type === 'question'){
+      if(node.yes) renderNode(node.yes, wrap, 'yes →');
+      if(node.no) renderNode(node.no, wrap, 'no →');
+    }
+    container.appendChild(wrap);
+  }
+
+  function render(){
+    treeRoot.innerHTML = '';
+    renderNode(tree, treeRoot, null);
+  }
+  document.getElementById('treeReset').addEventListener('click', function(){
+    tree = { type:'question', text:'', yes:null, no:null };
+    render();
+  });
+  render();
+
+  /* ---------------- lorem ipsum ---------------- */
+  var loremWords = ("lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor " +
+    "incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation " +
+    "ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit " +
+    "voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat " +
+    "non proident sunt culpa qui officia deserunt mollit anim id est laborum").split(' ');
+  function sentence(){
+    var len = 6 + Math.floor(Math.random()*10);
+    var words = [];
+    for(var i=0;i<len;i++){ words.push(loremWords[Math.floor(Math.random()*loremWords.length)]); }
+    var s = words.join(' ');
+    return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+  }
+  function paragraph(){
+    var sentences = 3 + Math.floor(Math.random()*4);
+    var out = [];
+    for(var i=0;i<sentences;i++){ out.push(sentence()); }
+    return out.join(' ');
+  }
+  document.getElementById('loremBtn').addEventListener('click', function(){
+    var n = Math.max(1, Math.min(20, parseInt(document.getElementById('loremCount').value,10) || 3));
+    var paras = [];
+    for(var i=0;i<n;i++){ paras.push(paragraph()); }
+    document.getElementById('loremOut').value = paras.join('\n\n');
+  });
+  document.getElementById('loremCopy').addEventListener('click', function(){
+    var t = document.getElementById('loremOut');
+    t.select();
+    document.execCommand && document.execCommand('copy');
+    navigator.clipboard && navigator.clipboard.writeText(t.value).catch(function(){});
+  });
+
+  var fakeFirst = ["Alex","Jordan","Sam","Taylor","Casey","Morgan","Riley","Jamie","Quinn","Avery","Rui","Ines","Tiago","Bea","Leo","Nina","Marco","Sofia","Dara","Kai"];
+  var fakeLast = ["Silva","Costa","Pereira","Ferreira","Santos","Marques","Oliveira","Rocha","Cardoso","Lopes","Nguyen","Smith","Garcia","Muller","Novak","Kim","Andrade","Teixeira"];
+  var fakeCities = ["Aveiro","Lisboa","Porto","Coimbra","Braga","Faro","Ílhavo","Setúbal","Leiria","Viseu"];
+  function randOf(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function genFake(n){
+    var rows = [];
+    for(var i=0;i<n;i++){
+      var f = randOf(fakeFirst), l = randOf(fakeLast);
+      rows.push({
+        name: f + ' ' + l,
+        email: (f + '.' + l).toLowerCase() + Math.floor(Math.random()*90+10) + '@example.com',
+        phone: '+351 9' + Math.floor(10000000+Math.random()*89999999),
+        city: randOf(fakeCities)
+      });
+    }
+    return rows;
+  }
+  var fakeData = [];
+  document.getElementById('fakeBtn').addEventListener('click', function(){
+    var n = Math.max(1, Math.min(50, parseInt(document.getElementById('fakeCount').value,10) || 8));
+    fakeData = genFake(n);
+    var body = document.getElementById('fakeBody');
+    body.innerHTML = '';
+    fakeData.forEach(function(r){
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>'+r.name+'</td><td>'+r.email+'</td><td>'+r.phone+'</td><td>'+r.city+'</td>';
+      body.appendChild(tr);
+    });
+  });
+  document.getElementById('fakeCopy').addEventListener('click', function(){
+    var json = JSON.stringify(fakeData, null, 2);
+    navigator.clipboard && navigator.clipboard.writeText(json).catch(function(){});
+  });
+
+  /* ---------------- contrast checker ---------------- */
+  var fgColor = document.getElementById('fgColor'), bgColor = document.getElementById('bgColor');
+  var contrastRatio = document.getElementById('contrastRatio'), contrastBadges = document.getElementById('contrastBadges'), contrastPreview = document.getElementById('contrastPreview');
+  function hexToRgb(hex){
+    var v = hex.replace('#','');
+    return { r: parseInt(v.substr(0,2),16), g: parseInt(v.substr(2,2),16), b: parseInt(v.substr(4,2),16) };
+  }
+  function relLum(rgb){
+    function chan(c){ c/=255; return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4); }
+    return 0.2126*chan(rgb.r) + 0.7152*chan(rgb.g) + 0.0722*chan(rgb.b);
+  }
+  function calcContrast(){
+    var fg = hexToRgb(fgColor.value), bg = hexToRgb(bgColor.value);
+    var l1 = relLum(fg), l2 = relLum(bg);
+    var ratio = (Math.max(l1,l2) + 0.05) / (Math.min(l1,l2) + 0.05);
+    contrastRatio.textContent = fmt(ratio) + ' : 1';
+    var checks = [
+      ['AA normal text (4.5:1)', ratio >= 4.5],
+      ['AA large text (3:1)', ratio >= 3],
+      ['AAA normal text (7:1)', ratio >= 7],
+      ['AAA large text (4.5:1)', ratio >= 4.5]
+    ];
+    contrastBadges.innerHTML = checks.map(function(c){
+      return '<span class="badge '+(c[1]?'pass':'fail')+'">'+(c[1]?'✓':'✕')+' '+c[0]+'</span>';
+    }).join('');
+    contrastPreview.style.color = fgColor.value;
+    contrastPreview.style.background = bgColor.value;
+  }
+  fgColor.addEventListener('input', calcContrast);
+  bgColor.addEventListener('input', calcContrast);
+  calcContrast();
+
+  /* ---------------- simple paint ---------------- */
+  var canvas = document.getElementById('paintCanvas');
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  var drawing = false, lastX = 0, lastY = 0;
+  var paintColor = document.getElementById('paintColor'), brushSize = document.getElementById('brushSize');
+
+  function getPos(e){
+    var rect = canvas.getBoundingClientRect();
+    var scaleX = canvas.width / rect.width, scaleY = canvas.height / rect.height;
+    var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+  }
+  function start(e){
+    drawing = true;
+    var p = getPos(e);
+    lastX = p.x; lastY = p.y;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, (parseInt(brushSize.value,10)||4)/2, 0, Math.PI*2);
+    ctx.fillStyle = paintColor.value;
+    ctx.fill();
+    e.preventDefault();
+  }
+  function move(e){
+    if(!drawing) return;
+    var p = getPos(e);
+    ctx.strokeStyle = paintColor.value;
+    ctx.lineWidth = parseInt(brushSize.value,10) || 4;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+    e.preventDefault();
+  }
+  function end(){ drawing = false; }
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove', move, {passive:false});
+  canvas.addEventListener('touchend', end);
+
+  document.getElementById('paintClear').addEventListener('click', function(){
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+  });
+  document.getElementById('paintSave').addEventListener('click', function(){
+    var link = document.createElement('a');
+    link.download = 'drawing.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+  var swatchColors = ['#111111','#ef6a6a','#f5a623','#5eead4','#4d8dff','#a855f7','#ffffff'];
+  var swatchesEl = document.getElementById('swatches');
+  swatchColors.forEach(function(c, i){
+    var s = document.createElement('div');
+    s.className = 'swatch' + (i===0?' active':'');
+    s.style.background = c;
+    s.addEventListener('click', function(){
+      paintColor.value = c;
+      swatchesEl.querySelectorAll('.swatch').forEach(function(sw){ sw.classList.remove('active'); });
+      s.classList.add('active');
+    });
+    swatchesEl.appendChild(s);
+  });
+
+  /* ---------------- dado virtual ---------------- */
+  var diceCount = document.getElementById('diceCount'), diceSides = document.getElementById('diceSides');
+  var diceTray = document.getElementById('diceTray'), diceSum = document.getElementById('diceSum');
+  document.getElementById('rollBtn').addEventListener('click', function(){
+    var n = Math.max(1, Math.min(12, parseInt(diceCount.value,10) || 1));
+    var sides = parseInt(diceSides.value,10);
+    diceTray.innerHTML = '';
+    var sum = 0;
+    for(var i=0;i<n;i++){
+      var val = 1 + Math.floor(Math.random()*sides);
+      sum += val;
+      var d = document.createElement('div');
+      d.className = 'die rolling';
+      d.textContent = val;
+      diceTray.appendChild(d);
+    }
+    diceSum.textContent = n > 1 ? ('sum: ' + sum) : ('rolled: ' + sum);
+  });
+
+})();
+</script>
+</body>
+</html>
