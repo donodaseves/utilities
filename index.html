@@ -111,7 +111,7 @@
     border:1px solid var(--border);
     color:var(--text);
     font-family:var(--mono);
-    font-size:12px;
+    font-size:14px;
     padding:8px 12px;
     border-radius:8px;
     cursor:pointer;
@@ -155,39 +155,52 @@
     .sidebar{height:auto;max-height:calc(100vh - 49px);position:sticky;}
   }
 
-  .category{margin:10px 0;}
+  .category{margin:4px 0;}
   .category-label{
+    display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+    background:none;border:none;cursor:pointer;
     font-family:var(--mono);
     font-size:11.5px;
     color:var(--text-faint);
-    padding:6px 20px;
+    padding:9px 20px;
     letter-spacing:.03em;
   }
+  .category-label:hover{color:var(--text-dim);}
+  .category-label .chevron{
+    font-size:10px;
+    transition:transform .15s ease;
+    color:var(--text-faint);
+  }
+  .category.expanded .category-label .chevron{transform:rotate(90deg);}
+  .category.expanded .category-label{color:var(--text);}
+
   .tool-link{
-    display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+    display:none;
+    align-items:center;gap:8px;width:100%;text-align:left;
     background:none;border:none;color:var(--text-dim);
     font-family:var(--mono);font-size:13px;
-    padding:7px 20px 7px 30px;cursor:pointer;border-left:2px solid transparent;
+    padding:7px 20px 7px 34px;cursor:pointer;border-left:2px solid transparent;
   }
+  .category.expanded .tool-link{display:flex;}
+  body.search-active .tool-link{display:flex;}
   .tool-link:hover{color:var(--text);background:var(--panel);}
   .tool-link.active{color:var(--accent);border-left-color:var(--accent);background:var(--panel);}
   .tool-link .ext{color:var(--text-faint);}
   .tool-link.active .ext{color:var(--accent-dim);}
   .tool-link .arrow{margin-left:auto;font-size:11px;color:var(--text-faint);}
-  .tool-link.hidden-by-search{display:none;}
+  .tool-link.hidden-by-search{display:none !important;}
   .category.hidden-by-search{display:none;}
 
   /* ---------- main ---------- */
-  main{padding:32px 42px 80px;max-width:920px;}
+  main{padding:32px 42px 80px;max-width:920px;margin:0 auto;}
   @media (max-width:600px){main{padding:22px 16px 60px;}}
   .panel{display:none;animation:fade .25s ease;}
   .panel.active{display:block;}
   @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
-  .panel-head{margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border-soft);}
+  .panel-head{margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border-soft);text-align:center;}
   .panel-eyebrow{font-family:var(--mono);font-size:12px;color:var(--accent);margin:0 0 6px;}
-  .panel-head h2{margin:0 0 6px;font-size:26px;letter-spacing:-0.01em;}
-  .panel-head p{margin:0;color:var(--text-dim);font-size:14.5px;max-width:62ch;}
+  .panel-head h2{margin:0;font-size:26px;letter-spacing:-0.01em;}
 
   .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
   .card h3{margin:0 0 14px;font-size:14px;font-family:var(--mono);color:var(--text-dim);font-weight:600;}
@@ -204,6 +217,8 @@
   .row{display:flex;gap:12px;flex-wrap:wrap;}
   .row > div{flex:1;min-width:110px;}
   .field{margin-bottom:12px;}
+  .checkfield{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-family:var(--sans);color:var(--text-dim);}
+  .checkfield input{width:auto;}
 
   button, .btn{
     background:var(--accent);color:var(--btn-text);border:none;font-family:var(--mono);
@@ -218,6 +233,8 @@
   button.small{padding:6px 10px;font-size:12px;}
   button:disabled{opacity:.4;cursor:not-allowed;}
 
+  .output-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+
   .result{
     font-family:var(--mono);font-size:15px;background:var(--bg-2);border:1px dashed var(--border);
     border-radius:7px;padding:12px 14px;color:var(--accent);margin-top:10px;word-break:break-word;
@@ -230,20 +247,31 @@
   tr.best td{color:var(--accent);}
 
   .link-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(200px,1fr));gap:14px;}
-  .link-card{display:block;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-decoration:none;transition:border-color .15s ease, transform .1s ease;}
+  .link-card{display:block;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-decoration:none;transition:border-color .15s ease, transform .1s ease;text-align:left;}
   .link-card:hover{border-color:var(--accent);transform:translateY(-2px);}
   .link-card .name{font-family:var(--mono);color:var(--text);font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;}
   .link-card .name .go{color:var(--accent);font-size:13px;}
   .link-card .desc{color:var(--text-dim);font-size:12.5px;margin-top:6px;}
   .link-card .url{color:var(--text-faint);font-size:11.5px;margin-top:8px;font-family:var(--mono);}
 
-  footer.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--border-soft);color:var(--text-faint);font-family:var(--mono);font-size:12px;}
+  footer.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--border-soft);color:var(--text-faint);font-family:var(--mono);font-size:12px;text-align:center;}
 
-  /* dice */
-  .dice-tray{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+  /* dice / coin */
+  .dice-tray{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center;}
   .die{width:56px;height:56px;border-radius:10px;background:var(--bg-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:20px;color:var(--accent);}
   .die.rolling{animation:roll .35s ease;}
   @keyframes roll{0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.08);}100%{transform:rotate(360deg) scale(1);}}
+  .coin{
+    width:90px;height:90px;border-radius:50%;margin:14px auto 0;
+    background:linear-gradient(135deg, var(--accent-2), var(--accent));
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-weight:700;font-size:13px;color:#0b0d12;
+    border:3px solid var(--border);
+  }
+  .coin.flipping{animation:coinflip .5s ease;}
+  @keyframes coinflip{0%{transform:rotateY(0);}50%{transform:rotateY(360deg) scale(1.1);}100%{transform:rotateY(720deg);}}
+  .flip-history{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--text-dim);}
+  .flip-history span{background:var(--bg-2);border:1px solid var(--border);border-radius:5px;padding:3px 7px;}
 
   /* contrast checker */
   .contrast-preview{border-radius:8px;padding:26px 20px;text-align:center;margin-top:14px;border:1px solid var(--border);}
@@ -254,14 +282,15 @@
   .badge.fail{background:rgba(239,106,106,.15);color:var(--danger);}
 
   /* paint */
-  #paintCanvas{background:#ffffff;border-radius:8px;border:1px solid var(--border);touch-action:none;display:block;max-width:100%;cursor:crosshair;}
-  .paint-toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px;}
+  #paintCanvas{background:#ffffff;border-radius:8px;border:1px solid var(--border);touch-action:none;display:block;max-width:100%;cursor:crosshair;margin:0 auto;}
+  .paint-toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px;justify-content:center;}
   .paint-toolbar .field{margin-bottom:0;min-width:auto;}
   .swatches{display:flex;gap:6px;}
   .swatch{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);cursor:pointer;}
   .swatch.active{border-color:var(--text);}
 
   /* decision tree v2 */
+  .tree-toolbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-family:var(--mono);font-size:12px;color:var(--text-dim);}
   .tree-scroll{
     overflow:auto;
     padding:10px 4px 20px;
@@ -272,7 +301,7 @@
     background-size:18px 18px;
   }
   .tree-scroll.panning{cursor:grabbing;user-select:none;}
-  .tree-diagram{display:inline-flex;justify-content:center;min-width:100%;padding:0 40px;}
+  .tree-diagram{display:inline-flex;justify-content:center;min-width:100%;padding:0 40px;transform-origin:top center;}
   .tree-node{display:flex;flex-direction:column;align-items:center;}
   .tree-card{
     background:var(--bg-2);border:1px solid var(--border);border-radius:9px;
@@ -290,7 +319,6 @@
   .tree-children.single::before{left:50%;right:50%;border:none;}
   .tree-branch{position:relative;padding-top:0;display:flex;flex-direction:column;align-items:center;}
   .tree-branch::before{content:'';position:absolute;top:-22px;left:50%;width:2px;height:22px;background:var(--border);}
-  .tree-children.single .tree-branch::before{height:22px;top:-22px;}
   .branch-label{
     font-family:var(--mono);font-size:10.5px;color:var(--text-faint);
     background:var(--bg);padding:2px 6px;border:1px solid var(--border);border-radius:10px;
@@ -316,6 +344,25 @@
   .kbd-row:last-child{border-bottom:none;}
   .kbd-row .desc{color:var(--text-dim);font-size:14px;}
   kbd.key{font-family:var(--mono);font-size:12px;background:var(--bg-2);border:1px solid var(--border);border-radius:5px;padding:3px 8px;color:var(--text);}
+
+  /* diff checker */
+  .diff-output{
+    font-family:var(--mono);font-size:12.5px;background:var(--bg-2);border:1px solid var(--border);
+    border-radius:7px;padding:10px 12px;margin-top:10px;max-height:360px;overflow:auto;white-space:pre-wrap;
+  }
+  .diff-line{padding:1px 6px;border-radius:3px;}
+  .diff-add{background:rgba(126,231,135,.15);color:var(--ok);}
+  .diff-del{background:rgba(239,106,106,.15);color:var(--danger);text-decoration:line-through;}
+  .diff-same{color:var(--text-dim);}
+
+  /* browser info */
+  .info-list{display:flex;flex-direction:column;gap:0;}
+  .info-row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--border-soft);font-family:var(--mono);font-size:13px;}
+  .info-row:last-child{border-bottom:none;}
+  .info-row .k{color:var(--text-dim);}
+  .info-row .v{color:var(--text);text-align:right;word-break:break-all;}
+
+  .center-note{text-align:center;color:var(--text-faint);font-size:12px;font-family:var(--mono);margin-top:6px;}
 </style>
 </head>
 <body>
@@ -338,39 +385,68 @@
     </button>
     <div class="nav-body" id="navBody">
       <nav id="navList">
+
         <div class="category" data-cat="calculators">
-          <div class="category-label">/calculators</div>
+          <button class="category-label"><span class="chevron">▸</span>/calculators</button>
           <button class="tool-link" data-tool="percent">percentage<span class="ext">.calc</span></button>
           <button class="tool-link" data-tool="ppu">price-per-unit<span class="ext">.calc</span></button>
+          <button class="tool-link" data-tool="unitconv">unit-converter<span class="ext">.calc</span></button>
         </div>
+
+        <div class="category" data-cat="text">
+          <button class="category-label"><span class="chevron">▸</span>/text</button>
+          <button class="tool-link" data-tool="diffchecker">diff-checker<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="uppercase">uppercase<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="lowercase">lowercase<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="titlecase">title-case<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="wordcount">word-char-counter<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="linecount">line-counter<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="textcleaner">text-cleaner<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="whitespace">whitespace-remover<span class="ext">.txt</span></button>
+          <button class="tool-link" data-tool="listsorter">list-sorter<span class="ext">.txt</span></button>
+        </div>
+
         <div class="category" data-cat="generators">
-          <div class="category-label">/generators</div>
+          <button class="category-label"><span class="chevron">▸</span>/generators</button>
           <button class="tool-link" data-tool="picker">random-picker<span class="ext">.gen</span></button>
           <button class="tool-link" data-tool="decisiontree">decision-tree<span class="ext">.gen</span></button>
           <button class="tool-link" data-tool="lorem">lorem-ipsum<span class="ext">.gen</span></button>
+          <button class="tool-link" data-tool="randomnum">random-number<span class="ext">.gen</span></button>
         </div>
+
         <div class="category" data-cat="design">
-          <div class="category-label">/design</div>
+          <button class="category-label"><span class="chevron">▸</span>/design</button>
           <button class="tool-link" data-tool="contrast">contrast-checker<span class="ext">.tool</span></button>
           <button class="tool-link" data-tool="paint">paint<span class="ext">.tool</span></button>
         </div>
+
         <div class="category" data-cat="timers">
-          <div class="category-label">/timers</div>
+          <button class="category-label"><span class="chevron">▸</span>/timers</button>
           <button class="tool-link" data-tool="countdown">countdown<span class="ext">.timer</span></button>
           <button class="tool-link" data-tool="stopwatch">stopwatch<span class="ext">.timer</span></button>
         </div>
+
         <div class="category" data-cat="fun">
-          <div class="category-label">/fun</div>
+          <button class="category-label"><span class="chevron">▸</span>/fun</button>
           <button class="tool-link" data-tool="dice">virtual-dice<span class="ext">.tool</span></button>
+          <button class="tool-link" data-tool="coinflip">coin-flipper<span class="ext">.tool</span></button>
         </div>
+
+        <div class="category" data-cat="info">
+          <button class="category-label"><span class="chevron">▸</span>/info</button>
+          <button class="tool-link" data-tool="browserinfo">browser-info<span class="ext">.tool</span></button>
+        </div>
+
         <div class="category" data-cat="external">
-          <div class="category-label">/external</div>
+          <button class="category-label"><span class="chevron">▸</span>/external</button>
           <button class="tool-link" data-tool="links">redirects<span class="arrow">↗</span></button>
         </div>
+
         <div class="category" data-cat="shortcuts">
-          <div class="category-label">/shortcuts</div>
+          <button class="category-label"><span class="chevron">▸</span>/shortcuts</button>
           <button class="tool-link" data-tool="shortcuts">keyboard<span class="ext">.help</span></button>
         </div>
+
       </nav>
     </div>
   </aside>
@@ -382,7 +458,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/calculators/percentage.calc</p>
         <h2>% Math Calculator</h2>
-        <p>Three common percentage problems, solved live as you type.</p>
       </div>
 
       <div class="card">
@@ -418,7 +493,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/calculators/price-per-unit.calc</p>
         <h2>Price-per-Unit Comparison</h2>
-        <p>Compare products with different sizes to see which is actually cheaper.</p>
       </div>
       <div class="card">
         <table id="ppuTable">
@@ -429,21 +503,233 @@
       </div>
     </section>
 
+    <!-- UNIT CONVERTER -->
+    <section class="panel" id="panel-unitconv">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/calculators/unit-converter.calc</p>
+        <h2>Unit Converter</h2>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="field">
+            <label>category</label>
+            <select id="ucCategory">
+              <option value="length">length</option>
+              <option value="weight">weight</option>
+              <option value="temperature">temperature</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field"><label>value</label><input type="number" id="ucValue" value="1"></div>
+          <div class="field">
+            <label>from</label>
+            <select id="ucFrom"></select>
+          </div>
+          <div class="field">
+            <label>to</label>
+            <select id="ucTo"></select>
+          </div>
+        </div>
+        <div class="result" id="ucResult">—</div>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="ucResult">copy</button>
+          <button class="secondary small save-btn" data-target="ucResult" data-filename="unit-conversion.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFF CHECKER -->
+    <section class="panel" id="panel-diffchecker">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/diff-checker.txt</p>
+        <h2>Diff Checker</h2>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="field"><label>text A</label><textarea id="diffA" placeholder="original text…"></textarea></div>
+          <div class="field"><label>text B</label><textarea id="diffB" placeholder="changed text…"></textarea></div>
+        </div>
+        <button id="diffBtn">compare</button>
+        <div class="diff-output" id="diffOutput">run a comparison to see line-by-line differences</div>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="diffOutputText">copy</button>
+          <button class="secondary small save-btn" data-target="diffOutputText" data-filename="diff.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPPERCASE -->
+    <section class="panel" id="panel-uppercase">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/uppercase.txt</p>
+        <h2>Uppercase Converter</h2>
+      </div>
+      <div class="card">
+        <label>input</label>
+        <textarea id="upIn" placeholder="type or paste text…"></textarea>
+        <label style="margin-top:12px;">output</label>
+        <textarea id="upOut" readonly></textarea>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="upOut">copy</button>
+          <button class="secondary small save-btn" data-target="upOut" data-filename="uppercase.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOWERCASE -->
+    <section class="panel" id="panel-lowercase">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/lowercase.txt</p>
+        <h2>Lowercase Converter</h2>
+      </div>
+      <div class="card">
+        <label>input</label>
+        <textarea id="lowIn" placeholder="type or paste text…"></textarea>
+        <label style="margin-top:12px;">output</label>
+        <textarea id="lowOut" readonly></textarea>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="lowOut">copy</button>
+          <button class="secondary small save-btn" data-target="lowOut" data-filename="lowercase.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TITLE CASE -->
+    <section class="panel" id="panel-titlecase">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/title-case.txt</p>
+        <h2>Title Case Converter</h2>
+      </div>
+      <div class="card">
+        <label>input</label>
+        <textarea id="titleIn" placeholder="type or paste text…"></textarea>
+        <label style="margin-top:12px;">output</label>
+        <textarea id="titleOut" readonly></textarea>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="titleOut">copy</button>
+          <button class="secondary small save-btn" data-target="titleOut" data-filename="title-case.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORD / CHAR COUNTER -->
+    <section class="panel" id="panel-wordcount">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/word-char-counter.txt</p>
+        <h2>Word & Character Counter</h2>
+      </div>
+      <div class="card">
+        <label>input</label>
+        <textarea id="wcIn" placeholder="type or paste text…"></textarea>
+        <div class="result" id="wcResult">words: 0 · characters: 0 · characters (no spaces): 0 · sentences: 0</div>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="wcResult">copy</button>
+          <button class="secondary small save-btn" data-target="wcResult" data-filename="word-count.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LINE COUNTER -->
+    <section class="panel" id="panel-linecount">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/line-counter.txt</p>
+        <h2>Line Counter</h2>
+      </div>
+      <div class="card">
+        <label>input</label>
+        <textarea id="lcIn" placeholder="type or paste text…"></textarea>
+        <div class="result" id="lcResult">total lines: 0 · non-empty lines: 0</div>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="lcResult">copy</button>
+          <button class="secondary small save-btn" data-target="lcResult" data-filename="line-count.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEXT CLEANER -->
+    <section class="panel" id="panel-textcleaner">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/text-cleaner.txt</p>
+        <h2>Text Cleaner</h2>
+      </div>
+      <div class="card">
+        <label>input</label>
+        <textarea id="tcIn" placeholder="type or paste text…"></textarea>
+        <div class="row" style="margin-top:10px;">
+          <label class="checkfield"><input type="checkbox" id="tcTrim" checked> trim each line</label>
+          <label class="checkfield"><input type="checkbox" id="tcEmpty" checked> remove empty lines</label>
+          <label class="checkfield"><input type="checkbox" id="tcSpaces" checked> collapse spaces</label>
+          <label class="checkfield"><input type="checkbox" id="tcHtml"> strip HTML tags</label>
+        </div>
+        <button id="tcBtn" style="margin-top:10px;">clean</button>
+        <label style="margin-top:12px;">output</label>
+        <textarea id="tcOut" readonly></textarea>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="tcOut">copy</button>
+          <button class="secondary small save-btn" data-target="tcOut" data-filename="cleaned-text.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHITESPACE REMOVER -->
+    <section class="panel" id="panel-whitespace">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/whitespace-remover.txt</p>
+        <h2>Whitespace Remover</h2>
+      </div>
+      <div class="card">
+        <label>input</label>
+        <textarea id="wsIn" placeholder="type or paste text…"></textarea>
+        <div class="row" style="margin-top:10px;">
+          <div style="flex:none;"><button class="secondary small" id="wsTrim">trim lines</button></div>
+          <div style="flex:none;"><button class="secondary small" id="wsCollapse">collapse spaces</button></div>
+          <div style="flex:none;"><button class="secondary small" id="wsAll">remove all whitespace</button></div>
+        </div>
+        <label style="margin-top:12px;">output</label>
+        <textarea id="wsOut" readonly></textarea>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="wsOut">copy</button>
+          <button class="secondary small save-btn" data-target="wsOut" data-filename="whitespace-removed.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIST SORTER / DEDUPLICATOR -->
+    <section class="panel" id="panel-listsorter">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/text/list-sorter.txt</p>
+        <h2>List Sorter / Deduplicator</h2>
+      </div>
+      <div class="card">
+        <label>list (one item per line)</label>
+        <textarea id="lsIn" placeholder="banana&#10;apple&#10;apple&#10;cherry"></textarea>
+        <div class="row" style="margin-top:10px;">
+          <div style="flex:none;"><button class="secondary small" id="lsAZ">sort A → Z</button></div>
+          <div style="flex:none;"><button class="secondary small" id="lsZA">sort Z → A</button></div>
+          <div style="flex:none;"><button class="secondary small" id="lsDedupe">remove duplicates</button></div>
+          <div style="flex:none;"><button class="secondary small" id="lsShuffle">shuffle</button></div>
+          <label class="checkfield" style="flex:none;"><input type="checkbox" id="lsCase"> case-insensitive</label>
+        </div>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="lsIn">copy</button>
+          <button class="secondary small save-btn" data-target="lsIn" data-filename="list.txt">save .txt</button>
+        </div>
+      </div>
+    </section>
+
     <!-- RANDOM PICKER -->
     <section class="panel" id="panel-picker">
       <div class="panel-head">
         <p class="panel-eyebrow">/generators/random-picker.gen</p>
         <h2>Random Picker</h2>
-        <p>One item per line. Pick one at random.</p>
       </div>
       <div class="card">
         <label>options</label>
         <textarea id="pickerList" placeholder="pizza&#10;sushi&#10;tacos&#10;burgers"></textarea>
         <div class="row" style="margin-top:12px;align-items:center;">
           <div class="field" style="flex:none;">
-            <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;">
-              <input type="checkbox" id="pickerRemove" style="width:auto;"> remove after pick
-            </label>
+            <label class="checkfield"><input type="checkbox" id="pickerRemove"> remove after pick</label>
           </div>
           <div style="flex:none;"><button id="pickerBtn">pick one</button></div>
         </div>
@@ -456,13 +742,19 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/generators/decision-tree.gen</p>
         <h2>Decision Tree Generator</h2>
-        <p>Build a yes/no decision tree. Each question branches into two paths until it reaches an outcome.</p>
       </div>
       <div class="card">
+        <div class="tree-toolbar">
+          <button class="secondary small" id="treeZoomOut">−</button>
+          <span id="treeZoomLabel">100%</span>
+          <button class="secondary small" id="treeZoomIn">+</button>
+          <button class="secondary small" id="treeZoomReset">reset zoom</button>
+        </div>
         <div class="tree-scroll">
           <div class="tree-diagram" id="treeRoot"></div>
         </div>
-        <div class="node-actions" style="margin-top:14px;">
+        <div class="center-note">drag to pan · scroll to zoom</div>
+        <div class="node-actions" style="margin-top:14px;text-align:center;">
           <button class="secondary small" id="treeReset">reset tree</button>
         </div>
       </div>
@@ -473,7 +765,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/generators/lorem-ipsum.gen</p>
         <h2>Lorem Ipsum & Placeholder Data</h2>
-        <p>Filler text for layouts, and fake rows of data for testing tables and forms.</p>
       </div>
 
       <div class="card">
@@ -483,7 +774,10 @@
           <div style="flex:none;align-self:flex-end;"><button id="loremBtn">generate</button></div>
         </div>
         <textarea id="loremOut" style="min-height:160px;margin-top:10px;" readonly></textarea>
-        <button class="secondary small" id="loremCopy" style="margin-top:8px;">copy</button>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="loremOut">copy</button>
+          <button class="secondary small save-btn" data-target="loremOut" data-filename="lorem-ipsum.txt">save .txt</button>
+        </div>
       </div>
 
       <div class="card">
@@ -495,7 +789,33 @@
         <div style="overflow-x:auto;margin-top:10px;">
           <table id="fakeTable"><thead><tr><th>name</th><th>email</th><th>phone</th><th>city</th></tr></thead><tbody id="fakeBody"></tbody></table>
         </div>
-        <button class="secondary small" id="fakeCopy" style="margin-top:8px;">copy as JSON</button>
+        <textarea id="fakeJson" style="display:none;"></textarea>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="fakeJson">copy as JSON</button>
+          <button class="secondary small save-btn" data-target="fakeJson" data-filename="placeholder-data.json">save .txt</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RANDOM NUMBER GENERATOR -->
+    <section class="panel" id="panel-randomnum">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/generators/random-number.gen</p>
+        <h2>Random Number Generator</h2>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="field"><label>min</label><input type="number" id="rnMin" value="1"></div>
+          <div class="field"><label>max</label><input type="number" id="rnMax" value="100"></div>
+          <div class="field"><label>how many</label><input type="number" id="rnCount" value="1" min="1" max="1000"></div>
+        </div>
+        <label class="checkfield"><input type="checkbox" id="rnUnique"> no duplicates</label>
+        <button id="rnBtn" style="margin-top:10px;">generate</button>
+        <div class="result" id="rnResult">—</div>
+        <div class="output-actions">
+          <button class="secondary small copy-btn" data-target="rnResult">copy</button>
+          <button class="secondary small save-btn" data-target="rnResult" data-filename="random-numbers.txt">save .txt</button>
+        </div>
       </div>
     </section>
 
@@ -504,7 +824,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/design/contrast-checker.tool</p>
         <h2>Contrast Checker</h2>
-        <p>WCAG contrast ratio between a foreground and background color.</p>
       </div>
       <div class="card">
         <div class="row">
@@ -525,7 +844,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/design/paint.tool</p>
         <h2>Simple Paint</h2>
-        <p>Draw something. Nothing is saved unless you download it.</p>
       </div>
       <div class="card">
         <div class="paint-toolbar">
@@ -544,7 +862,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/timers/countdown.timer</p>
         <h2>Countdown Timer</h2>
-        <p>Set a custom duration and count down to zero.</p>
       </div>
       <div class="card">
         <div class="timer-inputs">
@@ -566,7 +883,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/timers/stopwatch.timer</p>
         <h2>Stopwatch</h2>
-        <p>Start, lap, and reset. Nothing carries over between sessions.</p>
       </div>
       <div class="card">
         <div class="timer-display" id="swDisplay">00:00.00</div>
@@ -584,7 +900,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/fun/virtual-dice.tool</p>
         <h2>Virtual Dice</h2>
-        <p>Roll any number of dice, in any size.</p>
       </div>
       <div class="card">
         <div class="row">
@@ -604,7 +919,39 @@
           <div style="flex:none;align-self:flex-end;"><button id="rollBtn">roll</button></div>
         </div>
         <div class="dice-tray" id="diceTray"></div>
-        <div class="result" id="diceSum">—</div>
+        <div class="result" id="diceSum" style="text-align:center;">—</div>
+      </div>
+    </section>
+
+    <!-- COIN FLIPPER -->
+    <section class="panel" id="panel-coinflip">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/fun/coin-flipper.tool</p>
+        <h2>Coin Flipper</h2>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="coin" id="coinEl">?</div>
+        <button id="coinBtn" style="margin-top:16px;">flip</button>
+        <div class="flip-history" id="coinHistory"></div>
+      </div>
+    </section>
+
+    <!-- BROWSER INFO -->
+    <section class="panel" id="panel-browserinfo">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/info/browser-info.tool</p>
+        <h2>Browser Info</h2>
+      </div>
+      <div class="card">
+        <div class="info-list" id="infoList">
+          <div class="info-row"><span class="k">loading…</span><span class="v"></span></div>
+        </div>
+        <textarea id="infoText" style="display:none;"></textarea>
+        <div class="output-actions">
+          <button class="secondary small" id="infoRefresh">refresh</button>
+          <button class="secondary small copy-btn" data-target="infoText">copy</button>
+          <button class="secondary small save-btn" data-target="infoText" data-filename="browser-info.txt">save .txt</button>
+        </div>
       </div>
     </section>
 
@@ -613,7 +960,6 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/external/redirects</p>
         <h2>Quick Redirects</h2>
-        <p>Shortcuts to external tools used often enough to be worth a bookmark.</p>
       </div>
       <div class="link-grid">
         <a class="link-card" href="https://www.diffchecker.com/" target="_blank" rel="noopener noreferrer">
@@ -644,16 +990,16 @@
       <div class="panel-head">
         <p class="panel-eyebrow">/shortcuts/keyboard.help</p>
         <h2>Shortcuts</h2>
-        <p>Keyboard shortcuts available anywhere on this site.</p>
       </div>
       <div class="card">
         <div class="kbd-row"><span class="desc">Focus the search bar</span><kbd class="key">Ctrl / Cmd + K</kbd></div>
         <div class="kbd-row"><span class="desc">Jump to the first matching tool</span><kbd class="key">Enter</kbd></div>
         <div class="kbd-row"><span class="desc">Clear search and unfocus</span><kbd class="key">Esc</kbd></div>
+        <div class="kbd-row"><span class="desc">Zoom the decision tree</span><kbd class="key">Scroll / + / −</kbd></div>
       </div>
     </section>
 
-    <footer class="foot">Donodaseves Utilities — static, client-side only. nothing you type here is stored, sent, or saved.</footer>
+    <footer class="foot">Personal project. No support or bug fixes provided.</footer>
   </main>
 </div>
 
@@ -664,6 +1010,7 @@
   /* ---------------- navigation ---------------- */
   var links = document.querySelectorAll('.tool-link');
   var panels = document.querySelectorAll('.panel');
+  var categoryEls = document.querySelectorAll('.category');
 
   function showTool(name){
     links.forEach(function(l){ l.classList.toggle('active', l.dataset.tool === name); });
@@ -678,6 +1025,15 @@
   document.getElementById('navToggle').addEventListener('click', function(){
     document.getElementById('navBody').classList.toggle('open');
   });
+
+  /* collapsible categories - all collapsed by default */
+  categoryEls.forEach(function(cat){
+    var label = cat.querySelector('.category-label');
+    label.addEventListener('click', function(){
+      cat.classList.toggle('expanded');
+    });
+  });
+
   showTool('percent');
 
   /* ---------------- theme toggle ---------------- */
@@ -692,13 +1048,13 @@
 
   /* ---------------- search ---------------- */
   var searchInput = document.getElementById('searchInput');
-  var categories = document.querySelectorAll('.category');
   var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
   document.getElementById('searchKbd').textContent = isMac ? 'Cmd K' : 'Ctrl K';
 
   function runSearch(){
     var q = searchInput.value.trim().toLowerCase();
-    categories.forEach(function(cat){
+    document.body.classList.toggle('search-active', q !== '');
+    categoryEls.forEach(function(cat){
       var toolLinks = cat.querySelectorAll('.tool-link');
       var anyVisible = false;
       toolLinks.forEach(function(l){
@@ -707,7 +1063,7 @@
         l.classList.toggle('hidden-by-search', !match);
         if(match) anyVisible = true;
       });
-      cat.classList.toggle('hidden-by-search', !anyVisible);
+      cat.classList.toggle('hidden-by-search', q !== '' && !anyVisible);
     });
   }
   searchInput.addEventListener('input', runSearch);
@@ -729,6 +1085,40 @@
       e.preventDefault();
       searchInput.focus();
       searchInput.select();
+    }
+  });
+
+  /* ---------------- shared copy / save ---------------- */
+  function getElText(el){
+    if(!el) return '';
+    if('value' in el) return el.value;
+    return el.textContent;
+  }
+  function copyText(text){
+    navigator.clipboard && navigator.clipboard.writeText(text).catch(function(){});
+  }
+  function saveText(text, filename){
+    var blob = new Blob([text], {type:'text/plain'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename || 'output.txt';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+  document.addEventListener('click', function(e){
+    var copyBtn = e.target.closest('.copy-btn');
+    if(copyBtn){
+      var el = document.getElementById(copyBtn.dataset.target);
+      copyText(getElText(el));
+      return;
+    }
+    var saveBtn = e.target.closest('.save-btn');
+    if(saveBtn){
+      var el2 = document.getElementById(saveBtn.dataset.target);
+      saveText(getElText(el2), saveBtn.dataset.filename);
     }
   });
 
@@ -790,6 +1180,181 @@
   document.getElementById('ppuAdd').addEventListener('click', function(){ ppuAddRow(); });
   ppuAddRow('brand A', 3.49, 500, 'g');
   ppuAddRow('brand B', 5.99, 1000, 'g');
+
+  /* ---------------- unit converter ---------------- */
+  var ucUnits = {
+    length: { mm:0.001, cm:0.01, m:1, km:1000, 'in':0.0254, ft:0.3048, yd:0.9144, mi:1609.344 },
+    weight: { mg:0.001, g:1, kg:1000, oz:28.3495, lb:453.592 },
+    temperature: { C:1, F:1, K:1 }
+  };
+  var ucCategory = document.getElementById('ucCategory'), ucFrom = document.getElementById('ucFrom'),
+      ucTo = document.getElementById('ucTo'), ucValue = document.getElementById('ucValue'), ucResult = document.getElementById('ucResult');
+
+  function ucPopulate(){
+    var cat = ucCategory.value;
+    var units = Object.keys(ucUnits[cat]);
+    ucFrom.innerHTML = units.map(function(u){ return '<option value="'+u+'">'+u+'</option>'; }).join('');
+    ucTo.innerHTML = units.map(function(u){ return '<option value="'+u+'">'+u+'</option>'; }).join('');
+    if(units.length > 1) ucTo.selectedIndex = 1;
+    ucCalc();
+  }
+  function tempToCelsius(v, unit){
+    if(unit === 'C') return v;
+    if(unit === 'F') return (v - 32) * 5/9;
+    if(unit === 'K') return v - 273.15;
+  }
+  function celsiusTo(v, unit){
+    if(unit === 'C') return v;
+    if(unit === 'F') return v * 9/5 + 32;
+    if(unit === 'K') return v + 273.15;
+  }
+  function ucCalc(){
+    var cat = ucCategory.value;
+    var v = parseFloat(ucValue.value);
+    if(isNaN(v)){ ucResult.textContent = '—'; return; }
+    var from = ucFrom.value, to = ucTo.value;
+    var result;
+    if(cat === 'temperature'){
+      result = celsiusTo(tempToCelsius(v, from), to);
+    } else {
+      var base = v * ucUnits[cat][from];
+      result = base / ucUnits[cat][to];
+    }
+    ucResult.textContent = v + ' ' + from + ' = ' + fmt(result) + ' ' + to;
+  }
+  ucCategory.addEventListener('change', ucPopulate);
+  [ucValue, ucFrom, ucTo].forEach(function(el){ el.addEventListener('input', ucCalc); el.addEventListener('change', ucCalc); });
+  ucPopulate();
+
+  /* ---------------- diff checker ---------------- */
+  function diffLines(a, b){
+    var linesA = a.split('\n'), linesB = b.split('\n');
+    var n = linesA.length, m = linesB.length;
+    var dp = [];
+    for(var i=0;i<=n;i++) dp.push(new Array(m+1).fill(0));
+    for(i=n-1;i>=0;i--){
+      for(var j=m-1;j>=0;j--){
+        if(linesA[i] === linesB[j]) dp[i][j] = dp[i+1][j+1] + 1;
+        else dp[i][j] = Math.max(dp[i+1][j], dp[i][j+1]);
+      }
+    }
+    var res = [];
+    i = 0; var jj = 0;
+    while(i < n && jj < m){
+      if(linesA[i] === linesB[jj]){ res.push({type:'same', text:linesA[i]}); i++; jj++; }
+      else if(dp[i+1][jj] >= dp[i][jj+1]){ res.push({type:'del', text:linesA[i]}); i++; }
+      else { res.push({type:'add', text:linesB[jj]}); jj++; }
+    }
+    while(i < n){ res.push({type:'del', text:linesA[i]}); i++; }
+    while(jj < m){ res.push({type:'add', text:linesB[jj]}); jj++; }
+    return res;
+  }
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  document.getElementById('diffBtn').addEventListener('click', function(){
+    var a = document.getElementById('diffA').value, b = document.getElementById('diffB').value;
+    var diff = diffLines(a, b);
+    var html = [], plain = [];
+    diff.forEach(function(d){
+      var prefix = d.type === 'add' ? '+ ' : d.type === 'del' ? '- ' : '  ';
+      var cls = d.type === 'add' ? 'diff-add' : d.type === 'del' ? 'diff-del' : 'diff-same';
+      html.push('<div class="diff-line ' + cls + '">' + esc(prefix + d.text) + '</div>');
+      plain.push(prefix + d.text);
+    });
+    document.getElementById('diffOutput').innerHTML = html.join('') || '<span class="diff-same">no differences</span>';
+    var hidden = document.getElementById('diffOutputText');
+    if(!hidden){
+      hidden = document.createElement('textarea');
+      hidden.id = 'diffOutputText';
+      hidden.style.display = 'none';
+      document.getElementById('diffOutput').after(hidden);
+    }
+    hidden.value = plain.join('\n');
+  });
+
+  /* ---------------- case converters ---------------- */
+  function bindCase(inId, outId, fn){
+    var input = document.getElementById(inId), output = document.getElementById(outId);
+    input.addEventListener('input', function(){ output.value = fn(input.value); });
+  }
+  bindCase('upIn', 'upOut', function(s){ return s.toUpperCase(); });
+  bindCase('lowIn', 'lowOut', function(s){ return s.toLowerCase(); });
+  bindCase('titleIn', 'titleOut', function(s){
+    return s.replace(/\w\S*/g, function(word){ return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase(); });
+  });
+
+  /* ---------------- word / char counter ---------------- */
+  var wcIn = document.getElementById('wcIn'), wcResult = document.getElementById('wcResult');
+  wcIn.addEventListener('input', function(){
+    var text = wcIn.value;
+    var words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    var chars = text.length;
+    var charsNoSpaces = text.replace(/\s/g,'').length;
+    var sentences = text.trim() === '' ? 0 : (text.match(/[.!?]+/g) || []).length;
+    wcResult.textContent = 'words: ' + words + ' · characters: ' + chars + ' · characters (no spaces): ' + charsNoSpaces + ' · sentences: ' + sentences;
+  });
+
+  /* ---------------- line counter ---------------- */
+  var lcIn = document.getElementById('lcIn'), lcResult = document.getElementById('lcResult');
+  lcIn.addEventListener('input', function(){
+    var text = lcIn.value;
+    var lines = text.length === 0 ? [] : text.split('\n');
+    var nonEmpty = lines.filter(function(l){ return l.trim() !== ''; }).length;
+    lcResult.textContent = 'total lines: ' + lines.length + ' · non-empty lines: ' + nonEmpty;
+  });
+
+  /* ---------------- text cleaner ---------------- */
+  document.getElementById('tcBtn').addEventListener('click', function(){
+    var text = document.getElementById('tcIn').value;
+    if(document.getElementById('tcHtml').checked){ text = text.replace(/<[^>]*>/g, ''); }
+    var lines = text.split('\n');
+    if(document.getElementById('tcTrim').checked){ lines = lines.map(function(l){ return l.trim(); }); }
+    if(document.getElementById('tcSpaces').checked){ lines = lines.map(function(l){ return l.replace(/[ \t]+/g,' '); }); }
+    if(document.getElementById('tcEmpty').checked){ lines = lines.filter(function(l){ return l.trim() !== ''; }); }
+    document.getElementById('tcOut').value = lines.join('\n');
+  });
+
+  /* ---------------- whitespace remover ---------------- */
+  var wsIn = document.getElementById('wsIn'), wsOut = document.getElementById('wsOut');
+  document.getElementById('wsTrim').addEventListener('click', function(){
+    wsOut.value = wsIn.value.split('\n').map(function(l){ return l.trim(); }).join('\n');
+  });
+  document.getElementById('wsCollapse').addEventListener('click', function(){
+    wsOut.value = wsIn.value.split('\n').map(function(l){ return l.trim().replace(/\s+/g,' '); }).join('\n');
+  });
+  document.getElementById('wsAll').addEventListener('click', function(){
+    wsOut.value = wsIn.value.replace(/\s+/g,'');
+  });
+
+  /* ---------------- list sorter / deduplicator ---------------- */
+  var lsIn = document.getElementById('lsIn'), lsCase = document.getElementById('lsCase');
+  function lsGetItems(){ return lsIn.value.split('\n').map(function(s){ return s; }).filter(function(s){ return s.trim() !== ''; }); }
+  document.getElementById('lsAZ').addEventListener('click', function(){
+    var items = lsGetItems();
+    items.sort(function(a,b){ return lsCase.checked ? a.toLowerCase().localeCompare(b.toLowerCase()) : a.localeCompare(b); });
+    lsIn.value = items.join('\n');
+  });
+  document.getElementById('lsZA').addEventListener('click', function(){
+    var items = lsGetItems();
+    items.sort(function(a,b){ return lsCase.checked ? b.toLowerCase().localeCompare(a.toLowerCase()) : b.localeCompare(a); });
+    lsIn.value = items.join('\n');
+  });
+  document.getElementById('lsDedupe').addEventListener('click', function(){
+    var items = lsGetItems();
+    var seen = {}, out = [];
+    items.forEach(function(it){
+      var key = lsCase.checked ? it.toLowerCase() : it;
+      if(!seen[key]){ seen[key] = true; out.push(it); }
+    });
+    lsIn.value = out.join('\n');
+  });
+  document.getElementById('lsShuffle').addEventListener('click', function(){
+    var items = lsGetItems();
+    for(var i = items.length-1; i>0; i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+    }
+    lsIn.value = items.join('\n');
+  });
 
   /* ---------------- random picker ---------------- */
   var pickerList = document.getElementById('pickerList'), pickerBtn = document.getElementById('pickerBtn'),
@@ -893,17 +1458,16 @@
   });
   render();
 
-  /* ---------------- decision tree canvas panning ---------------- */
+  /* ---------------- decision tree pan + zoom ---------------- */
   var treeScroll = document.querySelector('.tree-scroll');
-  var isPanning = false, panStartX = 0, panStartY = 0, panScrollX = 0, panScrollY = 0, didPan = false;
+  var isPanning = false, panStartX = 0, panStartY = 0, panScrollX = 0, panScrollY = 0;
+  var zoomLevel = 1;
+  var treeZoomLabel = document.getElementById('treeZoomLabel');
 
-  function isInteractive(el){
-    return !!el.closest('input, button, textarea, select, a');
-  }
+  function isInteractive(el){ return !!el.closest('input, button, textarea, select, a'); }
   function panStart(e){
     if(isInteractive(e.target)) return;
     isPanning = true;
-    didPan = false;
     treeScroll.classList.add('panning');
     var p = e.touches ? e.touches[0] : e;
     panStartX = p.clientX; panStartY = p.clientY;
@@ -913,21 +1477,40 @@
     if(!isPanning) return;
     var p = e.touches ? e.touches[0] : e;
     var dx = p.clientX - panStartX, dy = p.clientY - panStartY;
-    if(Math.abs(dx) > 3 || Math.abs(dy) > 3) didPan = true;
     treeScroll.scrollLeft = panScrollX - dx;
     treeScroll.scrollTop = panScrollY - dy;
     if(e.touches) e.preventDefault();
   }
-  function panEnd(){
-    isPanning = false;
-    treeScroll.classList.remove('panning');
-  }
+  function panEnd(){ isPanning = false; treeScroll.classList.remove('panning'); }
   treeScroll.addEventListener('mousedown', panStart);
   window.addEventListener('mousemove', panMove);
   window.addEventListener('mouseup', panEnd);
   treeScroll.addEventListener('touchstart', panStart, {passive:true});
   treeScroll.addEventListener('touchmove', panMove, {passive:false});
   treeScroll.addEventListener('touchend', panEnd);
+
+  function applyZoom(){
+    treeRoot.style.zoom = zoomLevel;
+    treeZoomLabel.textContent = Math.round(zoomLevel*100) + '%';
+  }
+  document.getElementById('treeZoomIn').addEventListener('click', function(){
+    zoomLevel = Math.min(2, +(zoomLevel + 0.1).toFixed(2));
+    applyZoom();
+  });
+  document.getElementById('treeZoomOut').addEventListener('click', function(){
+    zoomLevel = Math.max(0.4, +(zoomLevel - 0.1).toFixed(2));
+    applyZoom();
+  });
+  document.getElementById('treeZoomReset').addEventListener('click', function(){
+    zoomLevel = 1;
+    applyZoom();
+  });
+  treeScroll.addEventListener('wheel', function(e){
+    e.preventDefault();
+    var delta = e.deltaY > 0 ? -0.05 : 0.05;
+    zoomLevel = Math.min(2, Math.max(0.4, +(zoomLevel + delta).toFixed(2)));
+    applyZoom();
+  }, {passive:false});
 
   /* ---------------- lorem ipsum ---------------- */
   var loremWords = ("lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor " +
@@ -954,12 +1537,6 @@
     for(var i=0;i<n;i++){ paras.push(paragraph()); }
     document.getElementById('loremOut').value = paras.join('\n\n');
   });
-  document.getElementById('loremCopy').addEventListener('click', function(){
-    var t = document.getElementById('loremOut');
-    t.select();
-    document.execCommand && document.execCommand('copy');
-    navigator.clipboard && navigator.clipboard.writeText(t.value).catch(function(){});
-  });
 
   var fakeFirst = ["Alex","Jordan","Sam","Taylor","Casey","Morgan","Riley","Jamie","Quinn","Avery","Rui","Ines","Tiago","Bea","Leo","Nina","Marco","Sofia","Dara","Kai"];
   var fakeLast = ["Silva","Costa","Pereira","Ferreira","Santos","Marques","Oliveira","Rocha","Cardoso","Lopes","Nguyen","Smith","Garcia","Muller","Novak","Kim","Andrade","Teixeira"];
@@ -978,10 +1555,9 @@
     }
     return rows;
   }
-  var fakeData = [];
   document.getElementById('fakeBtn').addEventListener('click', function(){
     var n = Math.max(1, Math.min(50, parseInt(document.getElementById('fakeCount').value,10) || 8));
-    fakeData = genFake(n);
+    var fakeData = genFake(n);
     var body = document.getElementById('fakeBody');
     body.innerHTML = '';
     fakeData.forEach(function(r){
@@ -989,10 +1565,29 @@
       tr.innerHTML = '<td>'+r.name+'</td><td>'+r.email+'</td><td>'+r.phone+'</td><td>'+r.city+'</td>';
       body.appendChild(tr);
     });
+    document.getElementById('fakeJson').value = JSON.stringify(fakeData, null, 2);
   });
-  document.getElementById('fakeCopy').addEventListener('click', function(){
-    var json = JSON.stringify(fakeData, null, 2);
-    navigator.clipboard && navigator.clipboard.writeText(json).catch(function(){});
+
+  /* ---------------- random number generator ---------------- */
+  document.getElementById('rnBtn').addEventListener('click', function(){
+    var min = parseInt(document.getElementById('rnMin').value,10);
+    var max = parseInt(document.getElementById('rnMax').value,10);
+    var count = Math.max(1, Math.min(1000, parseInt(document.getElementById('rnCount').value,10) || 1));
+    var unique = document.getElementById('rnUnique').checked;
+    var rnResult = document.getElementById('rnResult');
+    if(isNaN(min) || isNaN(max) || min > max){ rnResult.textContent = 'min must be less than or equal to max'; return; }
+    var range = max - min + 1;
+    if(unique && count > range){ rnResult.textContent = 'not enough unique numbers in that range'; return; }
+    var out = [];
+    if(unique){
+      var pool = [];
+      for(var i=min;i<=max;i++) pool.push(i);
+      for(i=pool.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+      out = pool.slice(0, count);
+    } else {
+      for(i=0;i<count;i++){ out.push(min + Math.floor(Math.random()*range)); }
+    }
+    rnResult.textContent = out.join(', ');
   });
 
   /* ---------------- contrast checker ---------------- */
@@ -1238,6 +1833,54 @@
     }
     diceSum.textContent = n > 1 ? ('sum: ' + sum) : ('rolled: ' + sum);
   });
+
+  /* ---------------- coin flipper ---------------- */
+  var coinEl = document.getElementById('coinEl'), coinHistory = document.getElementById('coinHistory');
+  var flipHistory = [];
+  document.getElementById('coinBtn').addEventListener('click', function(){
+    coinEl.classList.remove('flipping');
+    void coinEl.offsetWidth;
+    coinEl.classList.add('flipping');
+    var result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+    setTimeout(function(){
+      coinEl.textContent = result;
+      flipHistory.unshift(result);
+      if(flipHistory.length > 12) flipHistory.pop();
+      coinHistory.innerHTML = flipHistory.map(function(r){ return '<span>' + (r === 'Heads' ? 'H' : 'T') + '</span>'; }).join('');
+    }, 250);
+  });
+
+  /* ---------------- browser info ---------------- */
+  function renderInfo(rows){
+    var list = document.getElementById('infoList');
+    list.innerHTML = rows.map(function(r){
+      return '<div class="info-row"><span class="k">' + r[0] + '</span><span class="v">' + r[1] + '</span></div>';
+    }).join('');
+    document.getElementById('infoText').value = rows.map(function(r){ return r[0] + ': ' + r[1]; }).join('\n');
+  }
+  function loadInfo(){
+    var rows = [
+      ['User-Agent', navigator.userAgent],
+      ['Platform', navigator.platform || 'unknown'],
+      ['Language', navigator.language],
+      ['Screen resolution', screen.width + ' × ' + screen.height],
+      ['Viewport size', window.innerWidth + ' × ' + window.innerHeight],
+      ['IP address', 'looking up…']
+    ];
+    renderInfo(rows);
+    fetch('https://api.ipify.org?format=json')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        rows[5][1] = data.ip;
+        renderInfo(rows);
+      })
+      .catch(function(){
+        rows[5][1] = 'unavailable (network blocked)';
+        renderInfo(rows);
+      });
+  }
+  document.getElementById('infoRefresh').addEventListener('click', loadInfo);
+  loadInfo();
 
 })();
 </script>
