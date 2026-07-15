@@ -1,49 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Donodaseves Utilities</title>
+<title>Dase Utils</title>
+<link rel="canonical" href="https://donodaseves.github.io/daseutils/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%B0%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0f1117;
-    --bg-2:#0b0d12;
-    --panel:#171a24;
-    --panel-2:#1d2130;
-    --border:#2a2f40;
-    --border-soft:#20242f;
-    --text:#e7e9f0;
-    --text-dim:#8890a4;
-    --text-faint:#5b6272;
-    --accent:#5eead4;
-    --accent-dim:#2f7a6f;
-    --accent-2:#f5a623;
-    --danger:#ef6a6a;
-    --ok:#7ee787;
-    --btn-text:#0b0d12;
-    --mono:'JetBrains Mono', 'Fira Code', monospace;
-    --sans:'Inter', system-ui, -apple-system, sans-serif;
-    --radius:10px;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "Fira Code", "JetBrains Mono", Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --radius:6px;
+    --dur:160ms;
   }
-  body.light-theme{
-    --bg:#f5f4f0;
-    --bg-2:#ffffff;
-    --panel:#ffffff;
-    --panel-2:#f0eee8;
-    --border:#dcdad2;
-    --border-soft:#e8e6df;
-    --text:#191c24;
-    --text-dim:#5c6270;
-    --text-faint:#8b8f9b;
-    --accent:#0d9488;
-    --accent-dim:#0d948833;
-    --accent-2:#b8650f;
-    --danger:#c0392b;
-    --ok:#1a7f37;
+  html[data-theme="dark"]{
+    --bg:#1A1B1D;
+    --bg-2:#26272C;
+    --panel:#212226;
+    --panel-2:#26272C;
+    --border:#34363B;
+    --border-soft:#2B2C31;
+    --text:#E8E9EB;
+    --text-dim:#9A9CA3;
+    --text-faint:#6B6D74;
+    --accent:#4C7EF0;
+    --accent-dim:#4C7EF033;
+    --accent-2:#7C9EF5;
+    --danger:#C94A3B;
+    --ok:#5FBF7A;
     --btn-text:#ffffff;
+    --shadow:0 8px 24px rgba(0,0,0,0.45);
+  }
+  html[data-theme="light"]{
+    --bg:#F1F1F0;
+    --bg-2:#F5F5F5;
+    --panel:#FFFFFF;
+    --panel-2:#F5F5F5;
+    --border:#DDDEDF;
+    --border-soft:#E8E8E9;
+    --text:#1E1F22;
+    --text-dim:#63656B;
+    --text-faint:#94969C;
+    --accent:#3D63C9;
+    --accent-dim:#3D63C91a;
+    --accent-2:#6E8DDC;
+    --danger:#B33A2C;
+    --ok:#2F8F4E;
+    --btn-text:#ffffff;
+    --shadow:0 8px 24px rgba(20,20,20,0.08);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -58,7 +63,7 @@
   ::selection{background:var(--accent);color:#0b0d12;}
   a{color:var(--accent);}
 
-  /* ---------- topbar ---------- */
+  /* ---------- topbar (header) ---------- */
   .topbar{
     position:sticky;
     top:0;
@@ -67,34 +72,40 @@
     align-items:center;
     gap:16px;
     background:var(--bg-2);
-    border-bottom:1px solid var(--border);
-    padding:12px 20px;
+    border-bottom:1px solid var(--border-soft);
+    padding:14px 20px;
   }
   .topbar-brand{
-    font-family:var(--mono);
+    font-family:var(--serif);
     font-weight:700;
-    font-size:14px;
+    font-size:20px;
+    letter-spacing:-0.01em;
     white-space:nowrap;
     color:var(--text);
   }
-  .topbar-brand span{color:var(--accent);}
+  .version-badge{
+    font-family:var(--mono);font-size:10px;color:var(--text-faint) !important;
+    border:1px solid var(--border);border-radius:10px;padding:1px 7px;margin-left:6px;
+    vertical-align:middle;
+  }
   .search-wrap{
     flex:1;
-    max-width:420px;
+    max-width:340px;
     position:relative;
   }
   .search-wrap input{
     width:100%;
-    background:var(--bg);
+    background:var(--bg-2);
     border:1px solid var(--border);
     color:var(--text);
     border-radius:8px;
     padding:8px 70px 8px 34px;
-    font-size:13.5px;
+    font-size:13px;
     font-family:var(--sans);
     outline:none;
+    transition:border-color var(--dur);
   }
-  .search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(94,234,212,.15);}
+  .search-wrap input:focus{border-color:var(--text-faint);}
   .search-wrap .icon{
     position:absolute;left:11px;top:50%;transform:translateY(-50%);
     color:var(--text-faint);font-size:13px;pointer-events:none;
@@ -105,30 +116,75 @@
     border:1px solid var(--border);border-radius:4px;padding:2px 5px;
     pointer-events:none;
   }
-  .theme-toggle{
+
+  .header-controls{
+    display:flex;
+    align-items:center;
+    gap:8px;
     margin-left:auto;
+  }
+  .icon-btn{
     background:var(--panel);
     border:1px solid var(--border);
-    color:var(--text);
-    font-family:var(--mono);
-    font-size:14px;
-    padding:8px 12px;
+    color:var(--text-dim);
     border-radius:8px;
+    padding:8px 12px;
+    font-family:var(--mono);
+    font-size:12px;
     cursor:pointer;
-    display:flex;align-items:center;gap:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    text-decoration:none;
     white-space:nowrap;
+    transition:border-color var(--dur), color var(--dur), background var(--dur);
   }
-  .theme-toggle:hover{border-color:var(--accent);}
+  .icon-btn:hover{border-color:var(--text-faint);color:var(--text);}
+
+  .more-menu{position:relative;}
+  .more-dropdown{
+    display:none;
+    flex-direction:column;
+    position:absolute;
+    top:calc(100% + 6px);
+    right:0;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:8px;
+    box-shadow:var(--shadow);
+    min-width:170px;
+    overflow:hidden;
+    z-index:50;
+  }
+  .more-dropdown.open{display:flex;}
+  .more-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 12px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--text-dim);
+    background:transparent;
+    border:none;
+    text-align:left;
+    cursor:pointer;
+    width:100%;
+    box-sizing:border-box;
+  }
+  .more-item:hover{background:var(--bg-2);color:var(--text);}
+  .more-item.danger{color:var(--danger);}
+  .more-item.danger:hover{background:var(--danger);color:#fff;}
 
   /* ---------- layout ---------- */
   .app{
     display:grid;
     grid-template-columns:260px 1fr;
-    min-height:calc(100vh - 49px);
+    min-height:calc(100vh - 57px);
   }
   @media (max-width: 880px){
     .app{grid-template-columns:1fr;}
-    .topbar-brand{font-size:13px;}
+    .topbar-brand{font-size:17px;}
     .search-wrap{max-width:none;}
   }
 
@@ -138,9 +194,9 @@
     border-right:1px solid var(--border);
     padding:14px 0 40px;
     position:sticky;
-    top:49px;
+    top:57px;
     align-self:start;
-    height:calc(100vh - 49px);
+    height:calc(100vh - 57px);
     overflow-y:auto;
   }
   .nav-toggle{display:none;}
@@ -152,7 +208,7 @@
     }
     .nav-body{display:none;}
     .nav-body.open{display:block;}
-    .sidebar{height:auto;max-height:calc(100vh - 49px);position:sticky;}
+    .sidebar{height:auto;max-height:calc(100vh - 57px);position:sticky;}
   }
 
   .category{margin:4px 0;}
@@ -221,15 +277,16 @@
   .checkfield input{width:auto;}
 
   button, .btn{
-    background:var(--accent);color:var(--btn-text);border:none;font-family:var(--mono);
-    font-weight:600;font-size:13px;padding:9px 16px;border-radius:7px;cursor:pointer;
-    transition:transform .08s ease, opacity .15s ease;
+    background:var(--accent);color:var(--btn-text);border:1px solid var(--accent);font-family:var(--sans);
+    font-weight:600;font-size:12.5px;padding:8px 15px;border-radius:6px;cursor:pointer;
+    transition:border-color var(--dur), background var(--dur), opacity .15s ease;
   }
   button:hover{opacity:.88;}
-  button:active{transform:scale(.97);}
-  button.secondary{background:transparent;color:var(--text);border:1px solid var(--border);}
-  button.secondary:hover{border-color:var(--text-dim);opacity:1;}
-  button.danger{background:var(--danger);color:#fff;}
+  button:active{transform:scale(.98);}
+  button.secondary{background:var(--panel-2);color:var(--text);border:1px solid var(--border);}
+  button.secondary:hover{border-color:var(--text-faint);opacity:1;}
+  button.danger{background:transparent;color:var(--danger);border:1px solid var(--danger);}
+  button.danger:hover{background:var(--danger);color:#fff;opacity:1;}
   button.small{padding:6px 10px;font-size:12px;}
   button:disabled{opacity:.4;cursor:not-allowed;}
 
@@ -240,6 +297,7 @@
     border-radius:7px;padding:12px 14px;color:var(--accent);margin-top:10px;word-break:break-word;
   }
   .result .dim{color:var(--text-dim);font-size:12.5px;}
+  .muted{color:var(--text-dim);font-size:13.5px;line-height:1.6;}
 
   table{width:100%;border-collapse:collapse;font-size:13.5px;}
   th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border-soft);}
@@ -292,16 +350,24 @@
   /* decision tree v2 */
   .tree-toolbar{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-family:var(--mono);font-size:12px;color:var(--text-dim);}
   .tree-scroll{
-    overflow:auto;
-    padding:10px 4px 20px;
-    max-height:480px;
+    position:relative;
+    overflow:hidden;
+    height:480px;
     cursor:grab;
     border-radius:8px;
     background-image:radial-gradient(var(--border-soft) 1px, transparent 1px);
     background-size:18px 18px;
   }
   .tree-scroll.panning{cursor:grabbing;user-select:none;}
-  .tree-diagram{display:inline-flex;justify-content:center;min-width:100%;padding:0 40px;transform-origin:top center;}
+  .tree-diagram{
+    position:absolute;
+    left:50%;
+    top:24px;
+    display:inline-flex;
+    justify-content:center;
+    transform-origin:0 0;
+    will-change:transform;
+  }
   .tree-node{display:flex;flex-direction:column;align-items:center;}
   .tree-card{
     background:var(--bg-2);border:1px solid var(--border);border-radius:9px;
@@ -352,29 +418,36 @@
   }
   .diff-line{padding:1px 6px;border-radius:3px;}
   .diff-add{background:rgba(126,231,135,.15);color:var(--ok);}
-  .diff-del{background:rgba(239,106,106,.15);color:var(--danger);text-decoration:line-through;}
+  .diff-del{background:rgba(239,106,106,.18);color:var(--danger);text-decoration:line-through;}
   .diff-same{color:var(--text-dim);}
-
-  /* browser info */
-  .info-list{display:flex;flex-direction:column;gap:0;}
-  .info-row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--border-soft);font-family:var(--mono);font-size:13px;}
-  .info-row:last-child{border-bottom:none;}
-  .info-row .k{color:var(--text-dim);}
-  .info-row .v{color:var(--text);text-align:right;word-break:break-all;}
+  .diff-legend{display:flex;gap:14px;font-family:var(--mono);font-size:11.5px;color:var(--text-faint);margin-top:8px;justify-content:center;}
+  .diff-legend .add{color:var(--ok);}
+  .diff-legend .del{color:var(--danger);}
 
   .center-note{text-align:center;color:var(--text-faint);font-size:12px;font-family:var(--mono);margin-top:6px;}
 </style>
 </head>
 <body>
 
+
 <div class="topbar">
-  <div class="topbar-brand"><span>$</span> Donodaseves Utilities</div>
+  <div class="topbar-brand">Dase Utils<span class="version-badge" id="versionBadge">v1.0.0</span></div>
   <div class="search-wrap">
     <span class="icon">⌕</span>
     <input type="text" id="searchInput" placeholder="Search tools…">
     <kbd id="searchKbd">Ctrl K</kbd>
   </div>
-  <button class="theme-toggle" id="themeToggle"><span id="themeIcon">☾</span><span id="themeLabel">Dark</span></button>
+  <div class="header-controls">
+    <a class="icon-btn" id="donate-btn" href="#" target="_blank" rel="noopener" title="Support this project">♥ Donate</a>
+    <div class="more-menu">
+      <button class="icon-btn" id="more-trigger" aria-haspopup="true" aria-expanded="false" title="More options">⋯ More</button>
+      <div class="more-dropdown" id="more-dropdown">
+        <button class="more-item" id="theme-toggle" type="button">☾ Theme</button>
+        <button class="more-item" id="shortcuts-trigger" type="button">? Shortcuts</button>
+        <button class="more-item danger" id="reset-storage" type="button">⟲ Reset data</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="app">
@@ -432,11 +505,6 @@
           <button class="tool-link" data-tool="coinflip">coin-flipper<span class="ext">.tool</span></button>
         </div>
 
-        <div class="category" data-cat="info">
-          <button class="category-label"><span class="chevron">▸</span>/info</button>
-          <button class="tool-link" data-tool="browserinfo">browser-info<span class="ext">.tool</span></button>
-        </div>
-
         <div class="category" data-cat="external">
           <button class="category-label"><span class="chevron">▸</span>/external</button>
           <button class="tool-link" data-tool="links">redirects<span class="arrow">↗</span></button>
@@ -445,6 +513,11 @@
         <div class="category" data-cat="shortcuts">
           <button class="category-label"><span class="chevron">▸</span>/shortcuts</button>
           <button class="tool-link" data-tool="shortcuts">keyboard<span class="ext">.help</span></button>
+        </div>
+
+        <div class="category" data-cat="settings">
+          <button class="category-label"><span class="chevron">▸</span>/settings</button>
+          <button class="tool-link" data-tool="about">about<span class="ext">.info</span></button>
         </div>
 
       </nav>
@@ -499,7 +572,10 @@
           <thead><tr><th>item</th><th>price</th><th>qty</th><th>unit</th><th>per unit</th><th></th></tr></thead>
           <tbody id="ppuBody"></tbody>
         </table>
-        <button class="secondary small" id="ppuAdd" style="margin-top:12px;">+ add item</button>
+        <div class="output-actions">
+          <button class="secondary small" id="ppuAdd">+ add item</button>
+          <button class="secondary small" id="ppuReset">clear</button>
+        </div>
       </div>
     </section>
 
@@ -550,8 +626,12 @@
           <div class="field"><label>text A</label><textarea id="diffA" placeholder="original text…"></textarea></div>
           <div class="field"><label>text B</label><textarea id="diffB" placeholder="changed text…"></textarea></div>
         </div>
-        <button id="diffBtn">compare</button>
-        <div class="diff-output" id="diffOutput">run a comparison to see line-by-line differences</div>
+        <div class="row" style="align-items:center;">
+          <div style="flex:none;"><button id="diffBtn">compare</button></div>
+          <div style="flex:none;"><button class="secondary" id="diffResetBtn">clear</button></div>
+        </div>
+        <div class="diff-output" id="diffOutput">run a comparison to see exactly which words changed</div>
+        <div class="diff-legend"><span class="add">■ added</span><span class="del">■ removed</span></div>
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="diffOutputText">copy</button>
           <button class="secondary small save-btn" data-target="diffOutputText" data-filename="diff.txt">save .txt</button>
@@ -573,6 +653,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="upOut">copy</button>
           <button class="secondary small save-btn" data-target="upOut" data-filename="uppercase.txt">save .txt</button>
+          <button class="secondary small" id="upReset">clear</button>
         </div>
       </div>
     </section>
@@ -591,6 +672,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="lowOut">copy</button>
           <button class="secondary small save-btn" data-target="lowOut" data-filename="lowercase.txt">save .txt</button>
+          <button class="secondary small" id="lowReset">clear</button>
         </div>
       </div>
     </section>
@@ -609,6 +691,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="titleOut">copy</button>
           <button class="secondary small save-btn" data-target="titleOut" data-filename="title-case.txt">save .txt</button>
+          <button class="secondary small" id="titleReset">clear</button>
         </div>
       </div>
     </section>
@@ -626,6 +709,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="wcResult">copy</button>
           <button class="secondary small save-btn" data-target="wcResult" data-filename="word-count.txt">save .txt</button>
+          <button class="secondary small" id="wcReset">clear</button>
         </div>
       </div>
     </section>
@@ -643,6 +727,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="lcResult">copy</button>
           <button class="secondary small save-btn" data-target="lcResult" data-filename="line-count.txt">save .txt</button>
+          <button class="secondary small" id="lcReset">clear</button>
         </div>
       </div>
     </section>
@@ -668,6 +753,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="tcOut">copy</button>
           <button class="secondary small save-btn" data-target="tcOut" data-filename="cleaned-text.txt">save .txt</button>
+          <button class="secondary small" id="tcReset">clear</button>
         </div>
       </div>
     </section>
@@ -691,6 +777,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="wsOut">copy</button>
           <button class="secondary small save-btn" data-target="wsOut" data-filename="whitespace-removed.txt">save .txt</button>
+          <button class="secondary small" id="wsReset">clear</button>
         </div>
       </div>
     </section>
@@ -714,6 +801,7 @@
         <div class="output-actions">
           <button class="secondary small copy-btn" data-target="lsIn">copy</button>
           <button class="secondary small save-btn" data-target="lsIn" data-filename="list.txt">save .txt</button>
+          <button class="secondary small" id="lsReset">clear</button>
         </div>
       </div>
     </section>
@@ -732,6 +820,7 @@
             <label class="checkfield"><input type="checkbox" id="pickerRemove"> remove after pick</label>
           </div>
           <div style="flex:none;"><button id="pickerBtn">pick one</button></div>
+          <div style="flex:none;"><button class="secondary" id="pickerReset">clear</button></div>
         </div>
         <div class="result" id="pickerResult">—</div>
       </div>
@@ -755,7 +844,7 @@
         </div>
         <div class="center-note">drag to pan · scroll to zoom</div>
         <div class="node-actions" style="margin-top:14px;text-align:center;">
-          <button class="secondary small" id="treeReset">reset tree</button>
+          <button class="secondary small" id="treeReset">clear tree</button>
         </div>
       </div>
     </section>
@@ -873,7 +962,7 @@
         <div class="timer-controls">
           <button id="cdStart">start</button>
           <button class="secondary" id="cdPause">pause</button>
-          <button class="secondary" id="cdReset">reset</button>
+          <button class="secondary" id="cdReset">clear</button>
         </div>
       </div>
     </section>
@@ -889,7 +978,7 @@
         <div class="timer-controls">
           <button id="swStart">start</button>
           <button class="secondary" id="swLap">lap</button>
-          <button class="secondary" id="swReset">reset</button>
+          <button class="secondary" id="swReset">clear</button>
         </div>
         <div class="lap-list" id="swLaps"></div>
       </div>
@@ -936,25 +1025,6 @@
       </div>
     </section>
 
-    <!-- BROWSER INFO -->
-    <section class="panel" id="panel-browserinfo">
-      <div class="panel-head">
-        <p class="panel-eyebrow">/info/browser-info.tool</p>
-        <h2>Browser Info</h2>
-      </div>
-      <div class="card">
-        <div class="info-list" id="infoList">
-          <div class="info-row"><span class="k">loading…</span><span class="v"></span></div>
-        </div>
-        <textarea id="infoText" style="display:none;"></textarea>
-        <div class="output-actions">
-          <button class="secondary small" id="infoRefresh">refresh</button>
-          <button class="secondary small copy-btn" data-target="infoText">copy</button>
-          <button class="secondary small save-btn" data-target="infoText" data-filename="browser-info.txt">save .txt</button>
-        </div>
-      </div>
-    </section>
-
     <!-- EXTERNAL LINKS -->
     <section class="panel" id="panel-links">
       <div class="panel-head">
@@ -983,6 +1053,18 @@
           <div class="url">remove.bg</div>
         </a>
       </div>
+
+      <div class="panel-head" style="margin-top:32px;">
+        <p class="panel-eyebrow">/external/own-projects</p>
+        <h2>More from Donodaseves</h2>
+      </div>
+      <div class="link-grid">
+        <a class="link-card" href="https://donodaseves.github.io/daseailab/" target="_blank" rel="noopener noreferrer">
+          <div class="name">Dase AI Lab <span class="go">↗</span></div>
+          <div class="desc">A dashboard for launching AI models with productivity utilities.</div>
+          <div class="url">donodaseves.github.io/daseailab</div>
+        </a>
+      </div>
     </section>
 
     <!-- SHORTCUTS -->
@@ -996,6 +1078,31 @@
         <div class="kbd-row"><span class="desc">Jump to the first matching tool</span><kbd class="key">Enter</kbd></div>
         <div class="kbd-row"><span class="desc">Clear search and unfocus</span><kbd class="key">Esc</kbd></div>
         <div class="kbd-row"><span class="desc">Zoom the decision tree</span><kbd class="key">Scroll / + / −</kbd></div>
+        <div class="kbd-row"><span class="desc">Open theme / reset / shortcuts menu</span><kbd class="key">⋯ More</kbd></div>
+      </div>
+    </section>
+
+    <!-- ABOUT / SETTINGS -->
+    <section class="panel" id="panel-about">
+      <div class="panel-head">
+        <p class="panel-eyebrow">/settings/about.info</p>
+        <h2>About & Data</h2>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div class="result" id="aboutVersion">Dase Utils — v1.0.0</div>
+        <p class="muted" style="margin-top:10px;">donodaseves.github.io/daseutils</p>
+      </div>
+      <div class="card">
+        <h3>privacy</h3>
+        <p class="muted"><strong>Privacy.</strong> This is a fully client-side app — everything runs in your browser. No data is ever sent to or stored on any external server; every tool's content lives only in this browser's local storage.</p>
+        <p class="muted"><strong>Your data, your control.</strong> You can wipe everything stored by this app at any time using the <strong>⟲ Reset data</strong> option in the ⋯ More menu.</p>
+        <button class="danger" id="resetAllAboutBtn" style="margin-top:8px;">clear ALL data</button>
+      </div>
+      <div class="card">
+        <h3>personal project</h3>
+        <p class="muted"><strong>Personal project.</strong> This is a personal, hobby project provided "as-is," with no guaranteed support or bug fixes.</p>
+        <p class="muted"><strong>Support.</strong> If you find it useful, consider <a href="#" id="aboutDonateLink" target="_blank" rel="noopener">making a donation</a> to help keep it going.</p>
+        <a class="icon-btn" id="donateBtn" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;margin-top:6px;">♥ Donate</a>
       </div>
     </section>
 
@@ -1034,16 +1141,14 @@
     });
   });
 
-  showTool('percent');
+  showTool('about');
 
   /* ---------------- theme toggle ---------------- */
-  var themeToggle = document.getElementById('themeToggle');
-  var themeIcon = document.getElementById('themeIcon');
-  var themeLabel = document.getElementById('themeLabel');
-  themeToggle.addEventListener('click', function(){
-    var isLight = document.body.classList.toggle('light-theme');
-    themeIcon.textContent = isLight ? '☀' : '☾';
-    themeLabel.textContent = isLight ? 'Light' : 'Dark';
+  var themeToggleBtn = document.getElementById('theme-toggle');
+  themeToggleBtn.addEventListener('click', function(){
+    var isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    themeToggleBtn.textContent = isDark ? '☀ Theme' : '☾ Theme';
   });
 
   /* ---------------- search ---------------- */
@@ -1086,6 +1191,74 @@
       searchInput.focus();
       searchInput.select();
     }
+  });
+
+  /* ---------------- local storage helpers ---------------- */
+  var STORE_PREFIX = 'daseutils.';
+  var SITE_VERSION = 'v1.0.0';
+  var DONATE_URL = '#'; // TODO: replace with your real donate link (Ko-fi / PayPal / Buy Me a Coffee)
+  document.getElementById('versionBadge').textContent = SITE_VERSION;
+  document.getElementById('aboutVersion').textContent = 'Dase Utils — ' + SITE_VERSION;
+  document.getElementById('donateBtn').href = DONATE_URL;
+  document.getElementById('donate-btn').href = DONATE_URL;
+  document.getElementById('aboutDonateLink').href = DONATE_URL;
+
+  function storeSet(key, value){ try{ localStorage.setItem(STORE_PREFIX + key, value); }catch(e){} }
+  function storeGet(key){ try{ return localStorage.getItem(STORE_PREFIX + key); }catch(e){ return null; } }
+  function storeRemove(key){ try{ localStorage.removeItem(STORE_PREFIX + key); }catch(e){} }
+
+  // restores + autosaves a text input/textarea under a storage key.
+  // dispatches an 'input' event after restoring so any live-computed outputs refresh too.
+  function bindAutosave(el, key){
+    if(!el) return;
+    var saved = storeGet(key);
+    if(saved !== null){ el.value = saved; }
+    el.addEventListener('input', function(){ storeSet(key, el.value); });
+    if(saved !== null){ el.dispatchEvent(new Event('input')); }
+  }
+  function resetField(el, key, defaultVal){
+    storeRemove(key);
+    if(el){ el.value = defaultVal !== undefined ? defaultVal : ''; el.dispatchEvent(new Event('input')); }
+  }
+
+  function resetAllData(){
+    var ok = confirm('This clears all saved data (tool inputs, canvas, decision tree, theme) and reloads the page. Continue?');
+    if(!ok) return;
+    var keys = [];
+    for(var i=0;i<localStorage.length;i++){
+      var k = localStorage.key(i);
+      if(k && k.indexOf(STORE_PREFIX) === 0) keys.push(k);
+    }
+    keys.forEach(function(k){ localStorage.removeItem(k); });
+    location.reload();
+  }
+  document.getElementById('reset-storage').addEventListener('click', resetAllData);
+  document.getElementById('resetAllAboutBtn').addEventListener('click', resetAllData);
+
+  /* ---------------- more menu ---------------- */
+  var moreTrigger = document.getElementById('more-trigger');
+  var moreDropdown = document.getElementById('more-dropdown');
+  function toggleMore(e){
+    e.stopPropagation();
+    var isOpen = moreDropdown.classList.toggle('open');
+    moreTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  function closeMore(){
+    moreDropdown.classList.remove('open');
+    moreTrigger.setAttribute('aria-expanded', 'false');
+  }
+  moreTrigger.addEventListener('click', toggleMore);
+  document.addEventListener('click', function(e){
+    if(moreDropdown.classList.contains('open') && !moreDropdown.contains(e.target) && e.target !== moreTrigger){
+      closeMore();
+    }
+  });
+  document.getElementById('shortcuts-trigger').addEventListener('click', function(){
+    showTool('shortcuts');
+    closeMore();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && moreDropdown.classList.contains('open')) closeMore();
   });
 
   /* ---------------- shared copy / save ---------------- */
@@ -1148,6 +1321,7 @@
 
   /* ---------------- price per unit ---------------- */
   var ppuBody = document.getElementById('ppuBody');
+  var ppuDefaultRows = [['brand A', 3.49, 500, 'g'], ['brand B', 5.99, 1000, 'g']];
   function ppuAddRow(name, price, qty, unit){
     var tr = document.createElement('tr');
     tr.innerHTML =
@@ -1158,8 +1332,8 @@
       '<td class="ppuPer">—</td>' +
       '<td><button class="secondary small ppuDel">×</button></td>';
     ppuBody.appendChild(tr);
-    tr.querySelectorAll('input').forEach(function(inp){ inp.addEventListener('input', ppuRecalc); });
-    tr.querySelector('.ppuDel').addEventListener('click', function(){ tr.remove(); ppuRecalc(); });
+    tr.querySelectorAll('input').forEach(function(inp){ inp.addEventListener('input', function(){ ppuRecalc(); ppuSave(); }); });
+    tr.querySelector('.ppuDel').addEventListener('click', function(){ tr.remove(); ppuRecalc(); ppuSave(); });
     ppuRecalc();
   }
   function ppuRecalc(){
@@ -1177,9 +1351,32 @@
     });
     if(best) best.classList.add('best');
   }
-  document.getElementById('ppuAdd').addEventListener('click', function(){ ppuAddRow(); });
-  ppuAddRow('brand A', 3.49, 500, 'g');
-  ppuAddRow('brand B', 5.99, 1000, 'g');
+  function ppuSave(){
+    var rows = Array.from(ppuBody.querySelectorAll('tr')).map(function(tr){
+      return [
+        tr.querySelector('.ppuName').value,
+        tr.querySelector('.ppuPrice').value,
+        tr.querySelector('.ppuQty').value,
+        tr.querySelector('.ppuUnit').value
+      ];
+    });
+    storeSet('ppuRows', JSON.stringify(rows));
+  }
+  function ppuLoadOrDefault(){
+    var saved = storeGet('ppuRows');
+    var rows = ppuDefaultRows;
+    if(saved){
+      try{ var parsed = JSON.parse(saved); if(parsed && parsed.length) rows = parsed; }catch(e){}
+    }
+    rows.forEach(function(r){ ppuAddRow(r[0], r[1], r[2], r[3]); });
+  }
+  document.getElementById('ppuAdd').addEventListener('click', function(){ ppuAddRow(); ppuSave(); });
+  document.getElementById('ppuReset').addEventListener('click', function(){
+    storeRemove('ppuRows');
+    ppuBody.innerHTML = '';
+    ppuDefaultRows.forEach(function(r){ ppuAddRow(r[0], r[1], r[2], r[3]); });
+  });
+  ppuLoadOrDefault();
 
   /* ---------------- unit converter ---------------- */
   var ucUnits = {
@@ -1226,41 +1423,52 @@
   [ucValue, ucFrom, ucTo].forEach(function(el){ el.addEventListener('input', ucCalc); el.addEventListener('change', ucCalc); });
   ucPopulate();
 
-  /* ---------------- diff checker ---------------- */
-  function diffLines(a, b){
-    var linesA = a.split('\n'), linesB = b.split('\n');
-    var n = linesA.length, m = linesB.length;
+  /* ---------------- diff checker (word-level) ---------------- */
+  function tokenize(s){
+    // splits into words + whitespace/newlines, keeping every token so it can be reassembled exactly
+    return s.match(/\n|[^\S\n]+|\S+/g) || [];
+  }
+  function diffTokens(a, b){
+    var ta = tokenize(a), tb = tokenize(b);
+    var n = ta.length, m = tb.length;
     var dp = [];
     for(var i=0;i<=n;i++) dp.push(new Array(m+1).fill(0));
     for(i=n-1;i>=0;i--){
       for(var j=m-1;j>=0;j--){
-        if(linesA[i] === linesB[j]) dp[i][j] = dp[i+1][j+1] + 1;
+        if(ta[i] === tb[j]) dp[i][j] = dp[i+1][j+1] + 1;
         else dp[i][j] = Math.max(dp[i+1][j], dp[i][j+1]);
       }
     }
     var res = [];
     i = 0; var jj = 0;
     while(i < n && jj < m){
-      if(linesA[i] === linesB[jj]){ res.push({type:'same', text:linesA[i]}); i++; jj++; }
-      else if(dp[i+1][jj] >= dp[i][jj+1]){ res.push({type:'del', text:linesA[i]}); i++; }
-      else { res.push({type:'add', text:linesB[jj]}); jj++; }
+      if(ta[i] === tb[jj]){ res.push({type:'same', text:ta[i]}); i++; jj++; }
+      else if(dp[i+1][jj] >= dp[i][jj+1]){ res.push({type:'del', text:ta[i]}); i++; }
+      else { res.push({type:'add', text:tb[jj]}); jj++; }
     }
-    while(i < n){ res.push({type:'del', text:linesA[i]}); i++; }
-    while(jj < m){ res.push({type:'add', text:linesB[jj]}); jj++; }
+    while(i < n){ res.push({type:'del', text:ta[i]}); i++; }
+    while(jj < m){ res.push({type:'add', text:tb[jj]}); jj++; }
     return res;
   }
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   document.getElementById('diffBtn').addEventListener('click', function(){
     var a = document.getElementById('diffA').value, b = document.getElementById('diffB').value;
-    var diff = diffLines(a, b);
+    var diff = diffTokens(a, b);
     var html = [], plain = [];
     diff.forEach(function(d){
-      var prefix = d.type === 'add' ? '+ ' : d.type === 'del' ? '- ' : '  ';
-      var cls = d.type === 'add' ? 'diff-add' : d.type === 'del' ? 'diff-del' : 'diff-same';
-      html.push('<div class="diff-line ' + cls + '">' + esc(prefix + d.text) + '</div>');
-      plain.push(prefix + d.text);
+      if(d.type === 'same'){
+        html.push('<span class="diff-same">' + esc(d.text) + '</span>');
+        plain.push(d.text);
+      } else if(d.type === 'add'){
+        html.push('<span class="diff-line diff-add">' + esc(d.text) + '</span>');
+        plain.push('[+' + d.text + ']');
+      } else {
+        html.push('<span class="diff-line diff-del">' + esc(d.text) + '</span>');
+        plain.push('[-' + d.text + ']');
+      }
     });
-    document.getElementById('diffOutput').innerHTML = html.join('') || '<span class="diff-same">no differences</span>';
+    var hasChanges = diff.some(function(d){ return d.type !== 'same'; });
+    document.getElementById('diffOutput').innerHTML = hasChanges ? html.join('') : '<span class="diff-same">no differences</span>';
     var hidden = document.getElementById('diffOutputText');
     if(!hidden){
       hidden = document.createElement('textarea');
@@ -1268,7 +1476,14 @@
       hidden.style.display = 'none';
       document.getElementById('diffOutput').after(hidden);
     }
-    hidden.value = plain.join('\n');
+    hidden.value = plain.join('');
+  });
+  bindAutosave(document.getElementById('diffA'), 'diffA');
+  bindAutosave(document.getElementById('diffB'), 'diffB');
+  document.getElementById('diffResetBtn').addEventListener('click', function(){
+    resetField(document.getElementById('diffA'), 'diffA');
+    resetField(document.getElementById('diffB'), 'diffB');
+    document.getElementById('diffOutput').innerHTML = 'run a comparison to see exactly which words changed';
   });
 
   /* ---------------- case converters ---------------- */
@@ -1281,6 +1496,12 @@
   bindCase('titleIn', 'titleOut', function(s){
     return s.replace(/\w\S*/g, function(word){ return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase(); });
   });
+  bindAutosave(document.getElementById('upIn'), 'upIn');
+  bindAutosave(document.getElementById('lowIn'), 'lowIn');
+  bindAutosave(document.getElementById('titleIn'), 'titleIn');
+  document.getElementById('upReset').addEventListener('click', function(){ resetField(document.getElementById('upIn'), 'upIn'); });
+  document.getElementById('lowReset').addEventListener('click', function(){ resetField(document.getElementById('lowIn'), 'lowIn'); });
+  document.getElementById('titleReset').addEventListener('click', function(){ resetField(document.getElementById('titleIn'), 'titleIn'); });
 
   /* ---------------- word / char counter ---------------- */
   var wcIn = document.getElementById('wcIn'), wcResult = document.getElementById('wcResult');
@@ -1292,6 +1513,8 @@
     var sentences = text.trim() === '' ? 0 : (text.match(/[.!?]+/g) || []).length;
     wcResult.textContent = 'words: ' + words + ' · characters: ' + chars + ' · characters (no spaces): ' + charsNoSpaces + ' · sentences: ' + sentences;
   });
+  bindAutosave(wcIn, 'wcIn');
+  document.getElementById('wcReset').addEventListener('click', function(){ resetField(wcIn, 'wcIn'); });
 
   /* ---------------- line counter ---------------- */
   var lcIn = document.getElementById('lcIn'), lcResult = document.getElementById('lcResult');
@@ -1301,6 +1524,8 @@
     var nonEmpty = lines.filter(function(l){ return l.trim() !== ''; }).length;
     lcResult.textContent = 'total lines: ' + lines.length + ' · non-empty lines: ' + nonEmpty;
   });
+  bindAutosave(lcIn, 'lcIn');
+  document.getElementById('lcReset').addEventListener('click', function(){ resetField(lcIn, 'lcIn'); });
 
   /* ---------------- text cleaner ---------------- */
   document.getElementById('tcBtn').addEventListener('click', function(){
@@ -1311,6 +1536,11 @@
     if(document.getElementById('tcSpaces').checked){ lines = lines.map(function(l){ return l.replace(/[ \t]+/g,' '); }); }
     if(document.getElementById('tcEmpty').checked){ lines = lines.filter(function(l){ return l.trim() !== ''; }); }
     document.getElementById('tcOut').value = lines.join('\n');
+  });
+  bindAutosave(document.getElementById('tcIn'), 'tcIn');
+  document.getElementById('tcReset').addEventListener('click', function(){
+    resetField(document.getElementById('tcIn'), 'tcIn');
+    document.getElementById('tcOut').value = '';
   });
 
   /* ---------------- whitespace remover ---------------- */
@@ -1323,6 +1553,11 @@
   });
   document.getElementById('wsAll').addEventListener('click', function(){
     wsOut.value = wsIn.value.replace(/\s+/g,'');
+  });
+  bindAutosave(wsIn, 'wsIn');
+  document.getElementById('wsReset').addEventListener('click', function(){
+    resetField(wsIn, 'wsIn');
+    wsOut.value = '';
   });
 
   /* ---------------- list sorter / deduplicator ---------------- */
@@ -1355,6 +1590,8 @@
     }
     lsIn.value = items.join('\n');
   });
+  bindAutosave(lsIn, 'lsIn');
+  document.getElementById('lsReset').addEventListener('click', function(){ resetField(lsIn, 'lsIn'); });
 
   /* ---------------- random picker ---------------- */
   var pickerList = document.getElementById('pickerList'), pickerBtn = document.getElementById('pickerBtn'),
@@ -1368,6 +1605,11 @@
       items.splice(idx, 1);
       pickerList.value = items.join('\n');
     }
+  });
+  bindAutosave(pickerList, 'pickerList');
+  document.getElementById('pickerReset').addEventListener('click', function(){
+    resetField(pickerList, 'pickerList');
+    pickerResult.textContent = '—';
   });
 
   /* ---------------- decision tree v2 ---------------- */
@@ -1451,18 +1693,34 @@
   function render(){
     treeRoot.innerHTML = '';
     treeRoot.appendChild(buildNode(tree));
+    storeSet('decisionTree', JSON.stringify(tree));
   }
+  (function loadTree(){
+    var saved = storeGet('decisionTree');
+    if(saved){
+      try{ var parsed = JSON.parse(saved); if(parsed && parsed.type) tree = parsed; }catch(e){}
+    }
+  })();
   document.getElementById('treeReset').addEventListener('click', function(){
     tree = { type:'question', text:'', yes:null, no:null };
+    storeRemove('decisionTree');
     render();
   });
   render();
 
   /* ---------------- decision tree pan + zoom ---------------- */
   var treeScroll = document.querySelector('.tree-scroll');
-  var isPanning = false, panStartX = 0, panStartY = 0, panScrollX = 0, panScrollY = 0;
+  var isPanning = false, panStartX = 0, panStartY = 0, panX = 0, panY = 0, panStartPanX = 0, panStartPanY = 0;
   var zoomLevel = 1;
   var treeZoomLabel = document.getElementById('treeZoomLabel');
+
+  function applyTransform(){
+    // translate is applied in the untransformed coordinate space, then scale — so panning
+    // always moves the diagram itself, and zoom only ever changes its size, never the
+    // fixed-size viewport (.tree-scroll) around it.
+    treeRoot.style.transform = 'translate(calc(-50% + ' + panX + 'px), ' + panY + 'px) scale(' + zoomLevel + ')';
+    treeZoomLabel.textContent = Math.round(zoomLevel * 100) + '%';
+  }
 
   function isInteractive(el){ return !!el.closest('input, button, textarea, select, a'); }
   function panStart(e){
@@ -1471,14 +1729,14 @@
     treeScroll.classList.add('panning');
     var p = e.touches ? e.touches[0] : e;
     panStartX = p.clientX; panStartY = p.clientY;
-    panScrollX = treeScroll.scrollLeft; panScrollY = treeScroll.scrollTop;
+    panStartPanX = panX; panStartPanY = panY;
   }
   function panMove(e){
     if(!isPanning) return;
     var p = e.touches ? e.touches[0] : e;
-    var dx = p.clientX - panStartX, dy = p.clientY - panStartY;
-    treeScroll.scrollLeft = panScrollX - dx;
-    treeScroll.scrollTop = panScrollY - dy;
+    panX = panStartPanX + (p.clientX - panStartX);
+    panY = panStartPanY + (p.clientY - panStartY);
+    applyTransform();
     if(e.touches) e.preventDefault();
   }
   function panEnd(){ isPanning = false; treeScroll.classList.remove('panning'); }
@@ -1489,28 +1747,25 @@
   treeScroll.addEventListener('touchmove', panMove, {passive:false});
   treeScroll.addEventListener('touchend', panEnd);
 
-  function applyZoom(){
-    treeRoot.style.zoom = zoomLevel;
-    treeZoomLabel.textContent = Math.round(zoomLevel*100) + '%';
-  }
   document.getElementById('treeZoomIn').addEventListener('click', function(){
     zoomLevel = Math.min(2, +(zoomLevel + 0.1).toFixed(2));
-    applyZoom();
+    applyTransform();
   });
   document.getElementById('treeZoomOut').addEventListener('click', function(){
     zoomLevel = Math.max(0.4, +(zoomLevel - 0.1).toFixed(2));
-    applyZoom();
+    applyTransform();
   });
   document.getElementById('treeZoomReset').addEventListener('click', function(){
-    zoomLevel = 1;
-    applyZoom();
+    zoomLevel = 1; panX = 0; panY = 0;
+    applyTransform();
   });
   treeScroll.addEventListener('wheel', function(e){
     e.preventDefault();
     var delta = e.deltaY > 0 ? -0.05 : 0.05;
     zoomLevel = Math.min(2, Math.max(0.4, +(zoomLevel + delta).toFixed(2)));
-    applyZoom();
+    applyTransform();
   }, {passive:false});
+  applyTransform();
 
   /* ---------------- lorem ipsum ---------------- */
   var loremWords = ("lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor " +
@@ -1661,7 +1916,10 @@
     lastX = p.x; lastY = p.y;
     e.preventDefault();
   }
-  function end(){ drawing = false; }
+  function end(){
+    if(drawing){ storeSet('paintCanvas', canvas.toDataURL('image/png')); }
+    drawing = false;
+  }
   canvas.addEventListener('mousedown', start);
   canvas.addEventListener('mousemove', move);
   window.addEventListener('mouseup', end);
@@ -1669,9 +1927,18 @@
   canvas.addEventListener('touchmove', move, {passive:false});
   canvas.addEventListener('touchend', end);
 
+  (function loadPaint(){
+    var saved = storeGet('paintCanvas');
+    if(!saved) return;
+    var img = new Image();
+    img.onload = function(){ ctx.drawImage(img, 0, 0); };
+    img.src = saved;
+  })();
+
   document.getElementById('paintClear').addEventListener('click', function(){
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0,0,canvas.width,canvas.height);
+    storeRemove('paintCanvas');
   });
   document.getElementById('paintSave').addEventListener('click', function(){
     var link = document.createElement('a');
@@ -1849,38 +2116,6 @@
       coinHistory.innerHTML = flipHistory.map(function(r){ return '<span>' + (r === 'Heads' ? 'H' : 'T') + '</span>'; }).join('');
     }, 250);
   });
-
-  /* ---------------- browser info ---------------- */
-  function renderInfo(rows){
-    var list = document.getElementById('infoList');
-    list.innerHTML = rows.map(function(r){
-      return '<div class="info-row"><span class="k">' + r[0] + '</span><span class="v">' + r[1] + '</span></div>';
-    }).join('');
-    document.getElementById('infoText').value = rows.map(function(r){ return r[0] + ': ' + r[1]; }).join('\n');
-  }
-  function loadInfo(){
-    var rows = [
-      ['User-Agent', navigator.userAgent],
-      ['Platform', navigator.platform || 'unknown'],
-      ['Language', navigator.language],
-      ['Screen resolution', screen.width + ' × ' + screen.height],
-      ['Viewport size', window.innerWidth + ' × ' + window.innerHeight],
-      ['IP address', 'looking up…']
-    ];
-    renderInfo(rows);
-    fetch('https://api.ipify.org?format=json')
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        rows[5][1] = data.ip;
-        renderInfo(rows);
-      })
-      .catch(function(){
-        rows[5][1] = 'unavailable (network blocked)';
-        renderInfo(rows);
-      });
-  }
-  document.getElementById('infoRefresh').addEventListener('click', loadInfo);
-  loadInfo();
 
 })();
 </script>
